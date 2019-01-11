@@ -22,6 +22,7 @@ function Image({ color }) {
 }
 
 function Modal({ match, history }) {
+	console.log("modal match: ", match);
   let image = IMAGES[parseInt(match.params.id, 10)];
 
   if (!image) return null;

@@ -1,9 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Home from "../home/home.js";
 import Modal from "../modal/modal.js";
 
 class ModalSwitch extends React.Component {
-  previousLocation = this.props.location;
+	constructor(props) {
+    super(props);
+    this.state = {data: []};
+  }
+	previousLocation = this.props.location;
 
   componentWillUpdate(nextProps) {
     let { location } = this.props;
@@ -35,46 +40,6 @@ class ModalSwitch extends React.Component {
       </div>
     );
   }
-}
-
-const IMAGES = [
-  { id: 0, title: "Dark Orchid", color: "DarkOrchid" },
-  { id: 1, title: "Lime Green", color: "LimeGreen" },
-  { id: 2, title: "Tomato", color: "Tomato" },
-  { id: 3, title: "Seven Ate Nine", color: "#789" },
-  { id: 4, title: "Crimson", color: "Crimson" }
-];
-
-function Thumbnail({ color }) {
-  return (
-    <div
-      style={{
-        width: 50,
-        height: 50,
-        background: color
-      }}
-    />
-  );
-}
-
-function Home() {
-	return (
-    <div>
-      {IMAGES.map(i => (
-        <Link
-          key={i.id}
-          to={{
-            pathname: `/img/${i.id}`,
-            // this is the trick!
-            state: { modal: true }
-          }}
-        >
-          <Thumbnail color={i.color} />
-          <p>{i.title}</p>
-        </Link>
-      ))}
-    </div>
-  );
 }
 
 function ModalGallery() {
