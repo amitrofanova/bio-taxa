@@ -1,23 +1,11 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-const IMAGES = [
-  { id: 0, title: "Dark Orchid", color: "DarkOrchid" },
-  { id: 1, title: "Lime Green", color: "LimeGreen" },
-  { id: 2, title: "Tomato", color: "Tomato" },
-  { id: 3, title: "Seven Ate Nine", color: "#789" },
-  { id: 4, title: "Crimson", color: "Crimson" }
-];
-
-function Thumbnail({ background }) {
+function Thumbnail({ title }) {
   return (
-    <div
-      style={{
-        width: 50,
-        height: 50,
-        background: background
-      }}
-    />
+    <div>
+			{title}
+    </div>
   );
 }
 
@@ -53,6 +41,7 @@ class Home extends Component {
 
 	render() {
 		const { error, isLoaded, data } = this.state;
+
 		if (error) {
 			return <div>Error: {error.message}</div>;
 		} else if (!isLoaded) {
@@ -69,8 +58,8 @@ class Home extends Component {
 								state: { modal: true }
 							}}
 						>
-							<Thumbnail background={i.image_url} />
-							<p>{i.title}</p>
+							<Thumbnail title={i.title} />
+							<p>{i.description}</p>
 						</Link>
 					))}
 				</div>
