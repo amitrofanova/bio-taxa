@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Card from "../card/card.js";
 
-function Thumbnail({ title }) {
-  return (
-    <div>
-			{title}
-    </div>
-  );
-}
+// function Thumbnail({ title }) {
+//   return (
+//     <div>
+// 			{title}
+//     </div>
+//   );
+// }
 
 class Home extends Component {
 	constructor(props) {
@@ -57,9 +58,12 @@ class Home extends Component {
 								// this is the trick!
 								state: { modal: true }
 							}}
+							className="card"
 						>
-							<Thumbnail title={i.title} />
-							<p>{i.description}</p>
+							<Card
+								title={i.title}
+								description={i.description}
+							/>
 						</Link>
 					))}
 				</div>

@@ -1,0 +1,113 @@
+$border-color: darkslategray
+
+.card
+	position: relative
+	max-width: 350px
+	flex-basis: 19%
+	padding: 0 10px
+	z-index: 1
+
+.card__inner
+	position: relative
+	height: 100%
+	display: flex
+	flex-direction: column
+	border: 2px solid $border-color
+	border-bottom: none
+	text-align: center
+	cursor: pointer
+	&:hover
+		.card__title, .card__img
+			visibility: hidden
+		.card__description
+			visibility: visible
+		background-color: lighten($border-color, 80%)
+
+.card__id
+	display: none
+
+.card__title
+	padding-top: 7px
+	padding-bottom: 7px
+	background-color: #fff
+	font-size: 16px
+	font-weight: 700
+	z-index: 1
+
+.card__controllers
+	width: calc(100% - 20px)
+	display: flex
+	position: absolute
+	bottom: 0
+	left: 10px
+	& > div, & > a
+		flex-basis: 50%
+		border: 2px solid $border-color
+		padding: 2px
+		background-color: lighten(#dfdfdf, 10%)
+		text-align: center
+		opacity: .9
+		&:hover
+			background-color: #dfdfdf
+			cursor: pointer
+	.card__wiki-btn
+		border-right: none
+
+.card__img
+	height: 160px
+	overflow: hidden
+	img
+		display: block
+		width: 100%
+
+.card__description
+	position: absolute
+	top: 0
+	left: 0
+	max-height: 162px
+	overflow: hidden
+	padding: 7px 7px 0
+	font-size: 14px
+	visibility: hidden
+
+.card__details-link
+	color: #000
+	text-decoration: none
+
+.card__hierarchy-btn, .card__wiki-btn
+	img
+		width: 15px
+
+.card_moved-aside
+	transform: scale(.9)
+	opacity: .4
+
+.card_active
+	flex-grow: 1
+	cursor: auto
+
+.card__arc
+	z-index: 0
+
+.card__last-comment
+	position: absolute
+	bottom: 2px
+	left: 12px
+	width: 100px
+	padding: 6px 10px
+	opacity: .5
+	background-color: #fff
+	text-align: center
+
+.card_in-side-subcontainer
+	height: 120px
+
+.card_in-middle-subcontainer
+	.card__inner
+		height: auto
+	.card__img
+		height: auto
+
+.card_minimized
+	.card__info
+		display: none
