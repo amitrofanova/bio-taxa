@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./modal.sass";
-import Close from "../close/close.js";
-import "../close/close.sass";
+// import Close from "../close/close.js";
 
 class Modal extends Component {
 	constructor(props) {
@@ -13,6 +12,11 @@ class Modal extends Component {
 			data: [],
 		};
   }
+
+	browseBack(e) {
+		e.stopPropagation();
+		this.props.history.goBack();
+	};
 
 	componentDidMount() {
 		const idParam = this.props.match.params.id;
@@ -40,12 +44,6 @@ class Modal extends Component {
 		const taxonId = this.props.match.params.id;
 
 		if (!taxonId) return null;
-
-		let back = e => {
-			e.stopPropagation();
-			this.props.history.goBack();
-		};
-
 
 		if (error) {
 			return <div>Error: {error.message}</div>;
@@ -90,7 +88,8 @@ class Modal extends Component {
 							</div>
 						</div>
 
-						<div className="close modal__close" onClick={back}></div>
+						// TODO: add separate component
+						<div className="close modal__close" onClick={(e) => this.browseBack(e)}></div>
 					</div>
 				</div>
 			);
