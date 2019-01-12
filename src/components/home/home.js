@@ -53,7 +53,7 @@ class Home extends Component {
 						<Link
 							key={i.id}
 							to={{
-								pathname: `/img/${i.id}`,
+								pathname: `/taxon/${i.id}`,
 								// this is the trick!
 								state: { modal: true }
 							}}

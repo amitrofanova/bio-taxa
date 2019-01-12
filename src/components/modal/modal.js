@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./modal.sass";
 // import Close from "../close/close.js";
+import "../close/close.sass";
 
 class Modal extends Component {
 	constructor(props) {
@@ -20,6 +21,7 @@ class Modal extends Component {
 
 	componentDidMount() {
 		const idParam = this.props.match.params.id;
+
 		fetch(`https://biotax-api.herokuapp.com/api/taxon/${idParam}`)
 			.then(res => res.json())
 			.then(
@@ -46,9 +48,25 @@ class Modal extends Component {
 		if (!taxonId) return null;
 
 		if (error) {
-			return <div>Error: {error.message}</div>;
+			return (
+				<div className="modal">
+					<div className="modal__bg"></div>
+
+					<div className="modal__inner">
+						<div style={ { margin: 10 } }>Error: {error.message}</div>;
+					</div>
+				</div>
+			);
 		} else if (!isLoaded) {
-			return <div>Loading...</div>;
+			return (
+				<div className="modal">
+					<div className="modal__bg"></div>
+
+					<div className="modal__inner">
+						<div style={ { margin: 10 } }>Loading...</div>
+					</div>
+				</div>
+			);
 		} else {
 			return (
 				<div className="modal" data-id={data.id}>

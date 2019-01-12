@@ -13,6 +13,8 @@ class ModalSwitch extends React.Component {
   componentWillUpdate(nextProps) {
     let { location } = this.props;
 
+		console.log("location...", location);
+
     // set previousLocation if props.location is not modal
     if (
       nextProps.history.action !== "POP" &&
@@ -35,10 +37,12 @@ class ModalSwitch extends React.Component {
       <div>
         <Switch location={isModal ? this.previousLocation : location}>
           <Route exact path="/" component={Home} />
+					// FIXME: /taxon/:id doesn't render Modal
+					<Route path="/taxon/:id" component={Modal} />
         </Switch>
         {isModal ?
 					<Route
-						path="/img/:id"
+						path="/taxon/:id"
 						component={Modal}
 					/> : null}
       </div>
