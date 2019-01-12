@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 const IMAGES = [
@@ -9,61 +9,54 @@ const IMAGES = [
   { id: 4, title: "Crimson", color: "Crimson" }
 ];
 
-function Image({ color }) {
-  return (
-    <div
-      style={{
-        width: "100%",
-        height: 400,
-        background: color
-      }}
-    />
-  );
-}
+class Modal extends Component {
+	constructor(props) {
+    super(props);
+    this.state = {data: []};
+  }
+	render() {
+		let taxonId = this.props.match.params.id;
 
-function Modal({ match, history }) {
-	console.log("modal match: ", match);
-  let image = IMAGES[parseInt(match.params.id, 10)];
+		if (!taxonId) return null;
 
-  if (!image) return null;
+		let back = e => {
+			e.stopPropagation();
+			this.props.history.goBack();
+		};
 
-  let back = e => {
-    e.stopPropagation();
-    history.goBack();
-  };
+		return (
+			<div
+				onClick={back}
+				style={{
+					position: "absolute",
+					top: 0,
+					left: 0,
+					bottom: 0,
+					right: 0,
+					background: "rgba(0, 0, 0, 0.15)"
+				}}
+			>
+				<div
+					className="modal"
+					style={{
+						position: "absolute",
+						background: "#fff",
+						top: 25,
+						left: "10%",
+						right: "10%",
+						padding: 15,
+						border: "2px solid #444"
+					}}
+				>
+					<h1>{taxonId}</h1>
+					<button type="button" onClick={back}>
+						Close
+					</button>
+				</div>
+			</div>
+		);
+	}
 
-  return (
-    <div
-      onClick={back}
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
-        background: "rgba(0, 0, 0, 0.15)"
-      }}
-    >
-      <div
-        className="modal"
-        style={{
-          position: "absolute",
-          background: "#fff",
-          top: 25,
-          left: "10%",
-          right: "10%",
-          padding: 15,
-          border: "2px solid #444"
-        }}
-      >
-        <h1>{image.title}</h1>
-        <Image color={image.color} />
-        <button type="button" onClick={back}>
-          Close
-        </button>
-      </div>
-    </div>
-  );
 }
 
 export default Modal;

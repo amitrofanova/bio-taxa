@@ -36,7 +36,11 @@ class ModalSwitch extends React.Component {
         <Switch location={isModal ? this.previousLocation : location}>
           <Route exact path="/" component={Home} />
         </Switch>
-        {isModal ? <Route path="/img/:id" component={Modal} /> : null}
+        {isModal ?
+					<Route
+						path="/img/:id"
+						component={Modal}
+					/> : null}
       </div>
     );
   }
