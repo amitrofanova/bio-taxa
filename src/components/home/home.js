@@ -1,14 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Card from "../card/card.js";
-
-// function Thumbnail({ title }) {
-//   return (
-//     <div>
-// 			{title}
-//     </div>
-//   );
-// }
+import "./home.sass";
 
 class Home extends Component {
 	constructor(props) {
@@ -49,7 +42,7 @@ class Home extends Component {
 			return <div>Loading...</div>;
 		} else {
 			return (
-				<div>
+				<main className="hierarchy">
 					{data.map(i => (
 						<Link
 							key={i.id}
@@ -66,7 +59,7 @@ class Home extends Component {
 							/>
 						</Link>
 					))}
-				</div>
+				</main>
 			);
 		}
 	}

@@ -13,7 +13,7 @@ class Card extends Component {
 	render() {
 		return (
 			<div className="card" data-id={this.props.id}>
-				<a href="#" className="card__inner">
+				<div className="card__inner">
 					<div className="card__title">
 						{this.props.title}
 					</div>
@@ -25,12 +25,12 @@ class Card extends Component {
 					<div className="card__description">
 						{this.props.description} description
 					</div>
-				</a>
+				</div>
 
 				<div className="card__controllers">
-					<a className="card__wiki-btn" href="#" target="_blank">
+					<div className="card__wiki-btn">
 						<img src="https://via.placeholder.com/15" alt="read on wikipedia" />
-					</a>
+					</div>
 
 					<div className="card__hierarchy-btn">
 						<img src="https://via.placeholder.com/15" alt="hierarchy" />
