@@ -12,7 +12,7 @@ class Card extends Component {
 
 	render() {
 		return (
-			<div className="card" data-id={this.props.id}>
+			<React.Fragment>
 				<div className="card__inner">
 					<div className="card__title">
 						{this.props.title}
@@ -36,7 +36,7 @@ class Card extends Component {
 						<img src="https://via.placeholder.com/15" alt="hierarchy" />
 					</div>
 				</div>
-			</div>
+				</React.Fragment>
 		)
 	}
 }

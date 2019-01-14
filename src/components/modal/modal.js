@@ -26,7 +26,6 @@ class Modal extends Component {
 			.then(res => res.json())
 			.then(
 				(result) => {
-					console.log("fetch taxon... ", result);
 					this.setState({
 						isLoaded: true,
 						data: result

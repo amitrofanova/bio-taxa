@@ -41,14 +41,12 @@ class Home extends Component {
 			return <div>Loading...</div>;
 		} else {
 			return (
-				<main className="hierarchy">
+				<div className="row row_first">
 					{data.map(i => (
 						<Link
 							key={i.id}
 							to={{
-								pathname: `/taxon/${i.id}`,
-								// this is the trick!
-								state: { modal: true }
+								pathname: `/taxon/${i.id}`
 							}}
 							className="card"
 						>
@@ -58,7 +56,7 @@ class Home extends Component {
 							/>
 						</Link>
 					))}
-				</main>
+				</div>
 			);
 		}
 	}

@@ -19,7 +19,7 @@
 
 .hierarchy__row_first
 	height: 100%
-	flex-wrap: wrap
+	flex-wrap: nowrap
 	padding-top: 15px
 	.card
 		margin: 10px 0
@@ -44,4 +44,46 @@
 		flex-basis: 24%
 
 .hierarchy__row-subcontainer_middle
+	justify-content: center
+
+.row
+	padding-top: 8px
+	position: relative
+	width: 100%
+	display: flex
+	justify-content: space-around
+	&:nth-child(even)
+		background-color: #f5ffdc
+	&:nth-child(odd)
+		background-color: #fff
+	&:last-child
+		padding-bottom: 25px
+
+.row_first
+	height: 100%
+	flex-wrap: wrap
+	padding-top: 15px
+	.item
+		margin: 10px 0
+		width: 23%
+		flex: none
+		padding: 0 10px
+		&:hover
+			.item__title, .item__img
+				visibility: visible
+	.item__description
+		position: relative
+		top: auto
+		height: auto
+		visibility: visible
+
+.row__subcontainer
+	flex-basis: 32%
+	display: flex
+	justify-content: space-between
+	flex-wrap: wrap
+	.item
+		flex-basis: 24%
+
+.subcontainer_middle
 	justify-content: center
