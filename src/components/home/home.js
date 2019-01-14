@@ -18,7 +18,6 @@ class Home extends Component {
 			.then(res => res.json())
 			.then(
 				(result) => {
-					console.log("mount hierarchy... ", result);
 					this.setState({
 						isLoaded: true,
 						data: result
