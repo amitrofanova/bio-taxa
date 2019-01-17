@@ -42,7 +42,7 @@ class Tree extends Component {
 	}
 
 	handleHierarchyClick(e) {
-		console.log("click");
+		console.log(this.state);
 	}
 
 	render() {
