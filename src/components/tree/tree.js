@@ -30,8 +30,6 @@ class Tree extends Component {
 							isLoaded: true,
 							rows: [{rank: "Kingdom", items: result}],
 						});
-						console.log(this.state);
-						console.log(result);
 					},
 					(error) => {
 						this.setState({
@@ -43,8 +41,8 @@ class Tree extends Component {
 		}
 	}
 
-	handleClick() {
-
+	handleHierarchyClick(e) {
+		console.log("click");
 	}
 
 	render() {
@@ -56,7 +54,7 @@ class Tree extends Component {
 					<div className="modal__bg"></div>
 
 					<div className="modal__inner">
-						<div style={ { margin: 10 } }>Error: {error.message}</div>;
+						<div style={ { margin: 10 } }>Error: {error.message}</div>
 					</div>
 				</div>
 			);
@@ -80,7 +78,7 @@ class Tree extends Component {
 			)
 		}	else if (!activeTaxons.length){
 			return (
-				<Home data={rows[0].items}/>
+				<Home data={rows[0].items} onClick={(e) => this.handleHierarchyClick(e)} />
 			);
 		}
 	}

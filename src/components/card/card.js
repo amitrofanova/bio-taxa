@@ -12,8 +12,13 @@ class Card extends Component {
 
 	render() {
 		return (
-			<React.Fragment>
-				<div className="card__inner">
+			<div className="card">
+				<Link
+					to={{
+						pathname: `/taxon/${this.props.id}`
+					}}
+					className="card__inner"
+				>
 					<div className="card__title">
 						{this.props.title}
 					</div>
@@ -25,19 +30,19 @@ class Card extends Component {
 					<div className="card__description">
 						{this.props.description} description
 					</div>
-				</div>
+				</Link>
 
 				<div className="card__controllers">
 					<div className="card__wiki-btn">
 						<img src="https://via.placeholder.com/15" alt="read on wikipedia" />
 					</div>
 
-					<div className="card__hierarchy-btn">
+					<div className="card__hierarchy-btn" onClick={this.props.onClick}>
 						<img src="https://via.placeholder.com/15" alt="hierarchy" />
 					</div>
 				</div>
-				</React.Fragment>
-		)
+			</div>
+		);
 	}
 }
 

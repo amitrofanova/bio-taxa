@@ -14,18 +14,13 @@ class Home extends Component {
 		return (
 			<div className="row row_first">
 				{this.props.data.map(i => (
-					<Link
+					<Card
 						key={i.id}
-						to={{
-							pathname: `/taxon/${i.id}`
-						}}
-						className="card"
-					>
-						<Card
-							title={i.title}
-							description={i.description}
-						/>
-					</Link>
+						id={i.id}
+						title={i.title}
+						description={i.description}
+						onClick={() => this.props.onClick(i)}
+					/>
 				))}
 			</div>
 		);
