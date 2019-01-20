@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Home from "../home/home.js";
+import Card from "../card/card.js";
 
 class Tree extends Component {
 	constructor(props) {
@@ -18,8 +18,27 @@ class Tree extends Component {
   }
 
 	componentDidMount() {
-		if (this.state.activeTaxons.length) {
+		let activeTaxons = this.state.activeTaxons;
+		let num = activeTaxons.length;
+
+		if (activeTaxons.length) {
 			console.log("not king");
+			fetch(`https://biotax-api.herokuapp.com/api/children/${activeTaxons[num]}`)
+				.then(res => res.json())
+				.then(
+					(result) => {
+						this.setState({
+							isLoaded: true,
+							rows: [{rank: activeTaxons[num].children[0].rank, items: result.children}],
+						});
+					},
+					(error) => {
+						this.setState({
+							isLoaded: true,
+							error
+						});
+					}
+				)
 		} else {
 			console.log("mounted, kings");
 			fetch("https://biotax-api.herokuapp.com/api/kingdoms")
@@ -42,7 +61,7 @@ class Tree extends Component {
 	}
 
 	handleHierarchyClick(e) {
-		console.log(this.state);
+		console.log("click");
 	}
 
 	render() {
@@ -78,7 +97,17 @@ class Tree extends Component {
 			)
 		}	else if (!activeTaxons.length){
 			return (
-				<Home data={rows[0].items} onClick={(e) => this.handleHierarchyClick(e)} />
+				<div className="row row_first">
+					{rows[0].items.map(i => (
+						<Card
+							key={i.id}
+							id={i.id}
+							title={i.title}
+							description={i.description}
+							handleHierarchyClick={() => this.handleHierarchyClick()}
+						/>
+					))}
+				</div>
 			);
 		}
 	}

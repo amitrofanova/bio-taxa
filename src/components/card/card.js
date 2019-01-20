@@ -6,7 +6,6 @@ class Card extends Component {
 	constructor(props) {
     super(props);
     this.state = {
-			active: false,
 		};
   }
 
@@ -37,7 +36,10 @@ class Card extends Component {
 						<img src="https://via.placeholder.com/15" alt="read on wikipedia" />
 					</div>
 
-					<div className="card__hierarchy-btn" onClick={this.props.onClick}>
+					<div
+						className="card__hierarchy-btn"
+						onClick={this.props.handleHierarchyClick}
+					>
 						<img src="https://via.placeholder.com/15" alt="hierarchy" />
 					</div>
 				</div>
