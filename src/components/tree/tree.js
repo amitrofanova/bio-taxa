@@ -60,8 +60,37 @@ class Tree extends Component {
 		}
 	}
 
+	shouldComponentUpdate(){
+     console.log("shouldComponentUpdate()");
+     return true;
+ }
+ componentWillUpdate(){
+     console.log("componentWillUpdate()");
+ }
+ componentDidUpdate(){
+     console.log("componentDidUpdate()");
+ }
+
 	handleHierarchyClick(e) {
-		console.log("click");
+		let taxonId = e.target.dataset.id;
+
+		fetch(`https://biotax-api.herokuapp.com/api/children/${taxonId}`)
+			.then(res => res.json())
+			.then(
+				(result) => {
+					this.setState({
+						isLoaded: true,
+						rows: [{rank: result.children[0].rank, items: result.children}],
+						activeTaxons: [...this.state.activeTaxons, taxonId]
+				});
+				},
+				(error) => {
+					this.setState({
+						isLoaded: true,
+						error
+					});
+				}
+			)
 	}
 
 	render() {
@@ -87,27 +116,22 @@ class Tree extends Component {
 					</div>
 				</div>
 			);
-		} else if (activeTaxons.length) {
+		} else {
 			return (
-				<div>
-					{activeTaxons.map(i => (
-						<div key={i} data-row={i} className="row" />
-					))}
-				</div>
-			)
-		}	else if (!activeTaxons.length){
-			return (
-				<div className="row row_first">
-					{rows[0].items.map(i => (
-						<Card
-							key={i.id}
-							id={i.id}
-							title={i.title}
-							description={i.description}
-							handleHierarchyClick={() => this.handleHierarchyClick()}
-						/>
-					))}
-				</div>
+
+						<div className="row row_first">
+							{rows[0].items.map(i => (
+								<Card
+									key={i.id}
+									id={i.id}
+									title={i.title}
+									description={i.description}
+									handleHierarchyClick={(e) => this.handleHierarchyClick(e)}
+								/>
+							))}
+						</div>
+					
+
 			);
 		}
 	}

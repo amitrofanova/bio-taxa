@@ -37,6 +37,7 @@ class Card extends Component {
 					</div>
 
 					<div
+						data-id={this.props.id}
 						className="card__hierarchy-btn"
 						onClick={this.props.handleHierarchyClick}
 					>
