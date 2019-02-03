@@ -61,14 +61,14 @@ class Tree extends Component {
 	}
 
 	shouldComponentUpdate(){
-     console.log("shouldComponentUpdate()");
+     console.log("shouldComponentUpdate()", this.state);
      return true;
  }
  componentWillUpdate(){
-     console.log("componentWillUpdate()");
+     console.log("componentWillUpdate()", this.state);
  }
  componentDidUpdate(){
-     console.log("componentDidUpdate()");
+     console.log("componentDidUpdate()", this.state);
  }
 
 	handleHierarchyClick(e) {
@@ -78,11 +78,14 @@ class Tree extends Component {
 			.then(res => res.json())
 			.then(
 				(result) => {
+					let rank = result.children[0].rank;
+					let children = result.children;
+
 					this.setState({
 						isLoaded: true,
-						rows: [{rank: result.children[0].rank, items: result.children}],
+						rows: [...this.state.rows, {rank: rank, items: children}],
 						activeTaxons: [...this.state.activeTaxons, taxonId]
-				});
+					});
 				},
 				(error) => {
 					this.setState({
@@ -130,7 +133,7 @@ class Tree extends Component {
 								/>
 							))}
 						</div>
-					
+
 
 			);
 		}
