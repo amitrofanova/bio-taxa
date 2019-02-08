@@ -11,7 +11,7 @@ function Row(props) {
 					id={i.id}
 					title={i.title}
 					description={i.description}
-					onClick={() => props.onClick(i)}
+					handleHierarchyClick={props.handleHierarchyClick}
 				/>
 			))}
 		</div>

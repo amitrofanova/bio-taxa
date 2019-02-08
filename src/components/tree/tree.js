@@ -58,6 +58,8 @@ class Tree extends Component {
 
 	handleHierarchyClick(e) {
 		let taxonId = e.target.dataset.id;
+		console.log("taxonId: ", taxonId);
+		console.log("state: ", this.state);
 
 		fetch(`https://biotax-api.herokuapp.com/api/children/${taxonId}`)
 			.then(res => res.json())
@@ -126,6 +128,7 @@ class Tree extends Component {
 							<Row
 								key={i.rank}
 								data={i.items}
+								handleHierarchyClick={(e) => this.handleHierarchyClick(e)}
 							/>
 						))}
 					</div>
