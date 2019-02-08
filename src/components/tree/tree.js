@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Row from "../row/row.js";
 import Card from "../card/card.js";
 
 class Tree extends Component {
@@ -23,22 +24,6 @@ class Tree extends Component {
 
 		if (activeTaxons.length) {
 			console.log("not king");
-			fetch(`https://biotax-api.herokuapp.com/api/children/${activeTaxons[num]}`)
-				.then(res => res.json())
-				.then(
-					(result) => {
-						this.setState({
-							isLoaded: true,
-							rows: [{rank: activeTaxons[num].children[0].rank, items: result.children}],
-						});
-					},
-					(error) => {
-						this.setState({
-							isLoaded: true,
-							error
-						});
-					}
-				)
 		} else {
 			console.log("mounted, kings");
 			fetch("https://biotax-api.herokuapp.com/api/kingdoms")
@@ -120,22 +105,32 @@ class Tree extends Component {
 				</div>
 			);
 		} else {
-			return (
-
-						<div className="row row_first">
-							{rows[0].items.map(i => (
-								<Card
-									key={i.id}
-									id={i.id}
-									title={i.title}
-									description={i.description}
-									handleHierarchyClick={(e) => this.handleHierarchyClick(e)}
-								/>
-							))}
-						</div>
-
-
-			);
+			if (!activeTaxons.length) {
+				return (
+					<div className="row row_first">
+						{rows[0].items.map(i => (
+							<Card
+								key={i.id}
+								id={i.id}
+								title={i.title}
+								description={i.description}
+								handleHierarchyClick={(e) => this.handleHierarchyClick(e)}
+							/>
+						))}
+					</div>
+				);
+			} else {
+				return (
+					<div>
+						{rows.map(i => (
+							<Row
+								key={i.rank}
+								data={i.items}
+							/>
+						))}
+					</div>
+				)
+			}
 		}
 	}
 }
