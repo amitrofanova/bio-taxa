@@ -94,15 +94,15 @@ const MainPage = props => {
 };
 
 class Tree extends Component {
-  state = { queryString: "", results: [], loading: false, error: false }
+  state = {
+    // queryString: "",
+    results: [], loading: false, error: false }
 
-  updateQueryString = e => this.setState({ queryString: e.target.value });
-
-  updateURL = () => {
-    const url = setParams({ query: this.state.queryString });
-    console.log("queryString: ", this.state.queryString);
-    this.props.history.push(`?${url}`);
-  };
+  // updateURL = () => {
+  //   const url = setParams({ query: this.state.queryString });
+  //   console.log("queryString: ", this.state.queryString);
+  //   this.props.history.push(`?${url}`);
+  // };
 
   paintTree = query => {
     if (!query) {
@@ -130,6 +130,9 @@ class Tree extends Component {
           }
         )
     } else {
+      const searchParams = new URLSearchParams();
+      searchParams.set("query", query || "");
+
       this.setState({ loading: true, error: false });
       fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
         .then(res => res.json())
@@ -144,9 +147,8 @@ class Tree extends Component {
         )
         .catch(e => this.setState({ loading: false, error: true }));
 
-        const url = setParams({ query: this.state.queryString });
-        console.log("queryString: ", this.state.queryString);
-        this.props.history.push(`?${url}`);
+        // const url = setParams({ query: this.state.queryString });
+        this.props.history.push(`?query=${query}`);
     }
   };
 
