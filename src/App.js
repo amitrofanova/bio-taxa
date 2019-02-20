@@ -165,22 +165,6 @@ class Tree extends Component {
   render() {
     return (
       <React.Fragment>
-        <div id="search">
-          <input
-            type="text"
-            className="input"
-            placeholder="What am I looking for ?"
-            value={this.state.queryString}
-            onChange={this.updateQueryString}
-          />
-          <input
-            type="button"
-            className="button"
-            value="Search"
-            onClick={() => this.paintTree(this.state.queryString)}
-          />
-        </div>
-        <br/>
         <div className="loading">Loading state: {this.state.loading.toString()} </div>
         <div className="error">Errror state: {this.state.error.toString()} </div>
 
@@ -209,7 +193,7 @@ class Tree extends Component {
       					<div
       						data-id={card.id}
       						className="card__hierarchy-btn"
-      						onClick={() => this.paintTree(this.state.queryString)}
+      						onClick={() => this.paintTree(card.id)}
       					>
       						<img src="https://via.placeholder.com/15" alt="hierarchy" />
       					</div>
