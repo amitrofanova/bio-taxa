@@ -4,7 +4,7 @@ import {hot} from "react-hot-loader";
 import "./App.sass";
 // import Home from "./components/home/home.js";
 // import Tree from "./components/tree/tree.js";
-import Card from "./components/card/card.js";
+import Row from "./components/row/row.js";
 import Modal from "./components/modal/modal.js";
 
 class Home extends Component {
@@ -68,7 +68,6 @@ class Home extends Component {
 function getParams(location) {
   const searchParams = new URLSearchParams(location.search);
 
-  console.log("searchParams from getParams function: ", searchParams.get("query"));
   return {
     query: searchParams.get("query") || ""
   };
@@ -84,42 +83,37 @@ function setParams({ query }) {
 const MainPage = props => {
   const { query, history } = props;
 
-  console.log("mainPage props: ", props);
   return (
     <div>
       <Tree history={history} query={query} />
-      <h2>{`My query: ${query}`}</h2>
     </div>
   );
 };
 
 class Tree extends Component {
   state = {
-    // queryString: "",
-    results: [], loading: false, error: false }
+    queryString: "",
+    rows: [
+      {
+        rank: "",
+        items: [],
+      }
+    ],
+    loading: false,
+    error: false,
+  }
 
-  // updateURL = () => {
-  //   const url = setParams({ query: this.state.queryString });
-  //   console.log("queryString: ", this.state.queryString);
-  //   this.props.history.push(`?${url}`);
-  // };
 
   paintTree = query => {
     if (!query) {
-      // return this.setState({
-      //   results: []
-      // });
       fetch("https://biotax-api.herokuapp.com/api/kingdoms")
         .then(res => res.json())
         .then(
           (result) => {
-            console.log("kingdoms res: ", result);
-
             this.setState({
               // isLoaded: true,
-              // rows: [{rank: "Kingdom", items: result}],
+              rows: [{rank: "Kingdom", items: result}],
               loading: false,
-              results: result
             });
           },
           (error) => {
@@ -136,11 +130,12 @@ class Tree extends Component {
       this.setState({ loading: true, error: false });
       fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
         .then(res => res.json())
-        .then((data) => {
-          console.log("query: ", query);
-          console.log("fetching... ", data);
+        .then((result) => {
+          let rank = result.children[0].rank;
+					let children = result.children;
+
           this.setState({
-            results: data.children,
+            rows: [...this.state.rows, {rank: rank, items: children}],
             loading: false
           })
         }
@@ -153,7 +148,6 @@ class Tree extends Component {
   };
 
   componentDidMount() {
-    console.log("compDidMount props.query: ", this.props.query);
     return this.paintTree(this.props.query);
   }
 
@@ -171,36 +165,12 @@ class Tree extends Component {
         <div className="error">Errror state: {this.state.error.toString()} </div>
 
         <div>
-          {this.state.results.map(card => (
-            <div className="card" key={card.id}>
-      				<div className="card__inner">
-      					<div className="card__title">
-      						{card.title}
-      					</div>
-
-      					<div className="card__img">
-      						<img src="https://via.placeholder.com/150" alt="testimg" />
-      					</div>
-
-      					<div className="card__description">
-      						{card.description} description
-      					</div>
-      				</div>
-
-      				<div className="card__controllers">
-      					<div className="card__wiki-btn">
-      						<img src="https://via.placeholder.com/15" alt="read on wikipedia" />
-      					</div>
-
-      					<div
-      						data-id={card.id}
-      						className="card__hierarchy-btn"
-      						onClick={() => this.paintTree(card.id)}
-      					>
-      						<img src="https://via.placeholder.com/15" alt="hierarchy" />
-      					</div>
-      				</div>
-      			</div>
+          {this.state.rows.map(i => (
+            <Row
+              key={i.rank}
+              data={i.items}
+              onClick={this.paintTree}
+            />
           ))}
         </div>
       </React.Fragment>
