@@ -4,7 +4,66 @@ import {hot} from "react-hot-loader";
 import "./App.sass";
 // import Home from "./components/home/home.js";
 // import Tree from "./components/tree/tree.js";
+import Card from "./components/card/card.js";
 import Modal from "./components/modal/modal.js";
+
+class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+			error: null,
+			isLoaded: false,
+			rows: [
+				{
+					rank: "",
+					items: [],
+				}
+			],
+			activeTaxons: [],
+		};
+  }
+
+  handleHierarchyClick() {
+
+  }
+
+  componentDidMount() {
+    fetch("https://biotax-api.herokuapp.com/api/kingdoms")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            isLoaded: true,
+            rows: [{rank: "Kingdom", items: result}],
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+  }
+
+  render() {
+    const { error, isLoaded, rows, activeTaxons } = this.state;
+
+    return (
+      <div className="row row_first">
+        {rows[0].items.map(i => (
+          <Card
+            key={i.id}
+            id={i.id}
+            title={i.title}
+            description={i.description}
+            handleHierarchyClick={(e) => this.handleHierarchyClick(e)}
+          />
+        ))}
+      </div>
+    )
+  }
+}
 
 function getParams(location) {
   const searchParams = new URLSearchParams(location.search);
@@ -101,15 +160,15 @@ class Tree extends Component {
           />
         </div>
         <br/>
-        <div className="loading">Loading state: {this.state.loading} </div>
-        <div className="error">Errror state: {this.state.error} </div>
+        <div className="loading">Loading state: {this.state.loading.toString()} </div>
+        <div className="error">Errror state: {this.state.error.toString()} </div>
         <div>
-          {this.state.results.map(repo => (
-            <div className="repo" key={repo.id}>
-              <a className="repo-link" href={repo.items}>
-                {repo.name}
+          {this.state.results.map(child => (
+            <div className="child" key={child.id}>
+              <a className="child-link">
+                {child.name}
               </a>
-              <div className="repo-owner">{`by ${repo.rank}`}</div>
+              <div className="child-owner">{`by ${child.rank}`}</div>
             </div>
           ))}
         </div>
@@ -129,7 +188,13 @@ class App extends Component {
               path="/"
               render={({ location, history }) => {
                 const { query } = getParams(location);
-                return <MainPage query={query} history={history} />;
+
+                if (query) {
+                  return <MainPage query={query} history={history} />;
+                } else {
+                  return <Home />
+                }
+
               }}
             />
 					</Switch>
