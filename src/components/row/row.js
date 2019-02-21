@@ -4,14 +4,14 @@ import Card from "../card/card.js";
 
 function Row(props) {
 	return (
-		<div className="row">
+		<div className="row" data-rank={props.rank}>
 			{props.data.map(i => (
 				<Card
 					key={i.id}
 					id={i.id}
 					title={i.title}
 					description={i.description}
-					handleHierarchyClick={(e) => props.onClick(i.id)}
+					handleHierarchyClick={props.onClick}
 				/>
 			))}
 		</div>
