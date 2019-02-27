@@ -65,21 +65,27 @@ class Tree extends Component {
         .then(res => res.json())
         .then(
           (result) => {
-            let rank = result.children[0].rank;
+            let parentRank = this.state.rows[this.state.rows.length - 1].rank;
+            let childrenRank = result.children[0].rank;
   					let children = result.children;
 
+            if (this.state.rows.length === 1) {
+              this.setState({ queryString: `?Kingdom=${query}` });
+            } else {
+              this.setState({ queryString: this.state.queryString + `&${parentRank}=${query}` })
+            }
+
             this.setState({
-              rows: [...this.state.rows, {rank: rank, items: children}],
-              queryString: query,
+              rows: [...this.state.rows, {rank: childrenRank, items: children}],
               error: false,
-            })
+            });
+            console.log(this.state);
 
             const searchParams = new URLSearchParams();
 
-            searchParams.set(rank, query || "");
-            console.log(searchParams.toString());
+            searchParams.set(parentRank, query || "");
 
-            this.props.history.push(`?${rank}=${query}`);
+            this.props.history.push(this.state.queryString);
           },
           (error) => {
             this.setState({
@@ -95,16 +101,10 @@ class Tree extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log("scu");
-    console.log(this.state.rows);
-    console.log(nextState.rows);
     return nextState.rows != this.state.rows;
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("cwrp");
-    console.log(this.props.query);
-    console.log(this.state.queryString);
     if (nextProps.query !== this.props.query) {
       return this.paintTree(nextProps.query);
     }
