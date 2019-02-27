@@ -5,13 +5,13 @@ import "./App.sass";
 import Row from "./components/row/row.js";
 import Modal from "./components/modal/modal.js";
 
-function getParams(location) {
-  const searchParams = new URLSearchParams(location.search);
-
-  return {
-    query: searchParams.get("query") || ""
-  };
-}
+// function getParams(location) {
+//   const searchParams = new URLSearchParams(location.search);
+//
+//   return {
+//     query: searchParams.get("query") || ""
+//   };
+// }
 
 // function setParams({ query }) {
 //   const searchParams = new URLSearchParams();
@@ -61,38 +61,50 @@ class Tree extends Component {
           }
         )
     } else {
-      fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
+      var activeTaxon = "";
+      fetch(`https://biotax-api.herokuapp.com/api/taxon/${query}`)
         .then(res => res.json())
         .then(
           (result) => {
-            let parentRank = this.state.rows[this.state.rows.length - 1].rank;
-            let childrenRank = result.children[0].rank;
-  					let children = result.children;
+            activeTaxon = result.name;
+            console.log(activeTaxon);
 
-            if (this.state.rows.length === 1) {
-              this.setState({ queryString: `?Kingdom=${query}` });
-            } else {
-              this.setState({ queryString: this.state.queryString + `&${parentRank}=${query}` })
-            }
+            fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
+              .then(res => res.json())
+              .then(
+                (result) => {
+                  let parentRank = this.state.rows[this.state.rows.length - 1].rank;
+                  let childrenRank = result.children[0].rank;
+                  let children = result.children;
 
-            this.setState({
-              rows: [...this.state.rows, {rank: childrenRank, items: children}],
-              error: false,
-            });
-            console.log(this.state);
+                  if (this.state.rows.length === 1) {
+                    this.setState({ queryString: `?Kingdom=${activeTaxon}` });
+                  } else {
+                    this.setState({ queryString: this.state.queryString + `&${parentRank}=${activeTaxon}` })
+                  }
 
-            const searchParams = new URLSearchParams();
+                  this.setState({
+                    rows: [...this.state.rows, {rank: childrenRank, items: children}],
+                    error: false,
+                  });
+                  console.log(this.state);
 
-            searchParams.set(parentRank, query || "");
+                  const searchParams = new URLSearchParams();
 
-            this.props.history.push(this.state.queryString);
-          },
-          (error) => {
-            this.setState({
-              error
-            });
+                  searchParams.set(parentRank, activeTaxon || "");
+
+                  this.props.history.push(this.state.queryString);
+                },
+                (error) => {
+                  this.setState({
+                    error
+                  });
+                }
+              )
+
           }
         )
+
     }
   };
 
@@ -136,9 +148,9 @@ class App extends Component {
             <Route
               path="/"
               render={({ location, history }) => {
-                const { query } = getParams(location);
+                // const { query } = getParams(location);
 
-                return <MainPage query={query} history={history} />;
+                return <MainPage query={""} history={history} />;
               }}
             />
 					</Switch>
