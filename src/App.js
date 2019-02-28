@@ -5,13 +5,13 @@ import "./App.sass";
 import Row from "./components/row/row.js";
 import Modal from "./components/modal/modal.js";
 
-// function getParams(location) {
-//   const searchParams = new URLSearchParams(location.search);
-//
-//   return {
-//     query: searchParams.get("query") || ""
-//   };
-// }
+function getParams(location) {
+  const searchParams = new URLSearchParams(location.search);
+
+  return {
+    query: searchParams.get("taxon") || ""
+  };
+}
 
 // function setParams({ query }) {
 //   const searchParams = new URLSearchParams();
@@ -22,6 +22,7 @@ import Modal from "./components/modal/modal.js";
 
 const MainPage = props => {
   const { query, history } = props;
+  console.log("mainpage");
 
   return (
     <Tree history={history} query={query} />
@@ -45,6 +46,8 @@ class Tree extends Component {
   }
 
   paintTree = query => {
+    console.log(query);
+
     if (!query) {
       fetch("https://biotax-api.herokuapp.com/api/kingdoms")
         .then(res => res.json())
@@ -53,6 +56,7 @@ class Tree extends Component {
             this.setState({
               rows: [{rank: "Kingdom", items: result}],
             });
+            console.log(this.state);
           },
           (error) => {
             this.setState({
@@ -61,59 +65,45 @@ class Tree extends Component {
           }
         )
     } else {
-      var activeTaxon = "";
-      fetch(`https://biotax-api.herokuapp.com/api/taxon/${query}`)
+      fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
         .then(res => res.json())
         .then(
           (result) => {
-            activeTaxon = result.name;
-            console.log(activeTaxon);
+            let rank = result.children[0].rank;
+  					let children = result.children;
 
-            fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
-              .then(res => res.json())
-              .then(
-                (result) => {
-                  let parentRank = this.state.rows[this.state.rows.length - 1].rank;
-                  let childrenRank = result.children[0].rank;
-                  let children = result.children;
+            // this.setState({
+            //   rows: [...this.state.rows, {rank: rank, items: children}],
+            //   queryString: query,
+            //   error: false,
+            // });
 
-                  if (this.state.rows.length === 1) {
-                    this.setState({ queryString: `?Kingdom=${activeTaxon}` });
-                  } else {
-                    this.setState({ queryString: this.state.queryString + `&${parentRank}=${activeTaxon}` })
-                  }
+            // const searchParams = new URLSearchParams();
+            //
+            // searchParams.set("taxon", query || "");
 
-                  this.setState({
-                    rows: [...this.state.rows, {rank: childrenRank, items: children}],
-                    error: false,
-                  });
-                  console.log(this.state);
-
-                  const searchParams = new URLSearchParams();
-
-                  searchParams.set(parentRank, activeTaxon || "");
-
-                  this.props.history.push(this.state.queryString);
-                },
-                (error) => {
-                  this.setState({
-                    error
-                  });
-                }
-              )
-
+            this.props.history.push(`?mode=tree&taxon=${query}`);
+            console.log(this.state);
+          },
+          (error) => {
+            this.setState({
+              error
+            });
           }
         )
-
     }
   };
 
   componentDidMount() {
+    this.props.history.push(`?mode=tree`);
     return this.paintTree(this.props.query);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextState.rows != this.state.rows;
+    console.log("scu");
+    console.log(this.props);
+    console.log(nextProps);
+    return nextProps != this.props;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -148,9 +138,9 @@ class App extends Component {
             <Route
               path="/"
               render={({ location, history }) => {
-                // const { query } = getParams(location);
+                const { query } = getParams(location);
 
-                return <MainPage query={""} history={history} />;
+                return <MainPage query={query} history={history} />;
               }}
             />
 					</Switch>
