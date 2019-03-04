@@ -7,6 +7,7 @@ import Modal from "./components/modal/modal.js";
 
 function getParams(location) {
   const searchParams = new URLSearchParams(location.search);
+  console.log(searchParams.get("taxon"));
 
   return {
     query: searchParams.get("taxon") || ""
@@ -20,19 +21,28 @@ function getParams(location) {
 //   return searchParams.toString();
 // }
 
-const MainPage = props => {
-  const { query, history } = props;
+class MainPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      queryString: "",
+    };
+  }
 
-  return (
-    <div>
-      <InputPage history={history} />
-      <h2>{`My query: ${query}`}</h2>
-      <ResultsPage query={query} />
-    </div>
-  );
+  updateUrl = (evt) => {
+    const url = evt.target.dataset.id;
+    console.log("url: ", url);
+    this.props.history.push(`?taxon=${url}`);
+  };
+
+  render() {
+    return (
+      <ResultsPage query={this.props.query} onClick={this.updateUrl}/>
+    );
+  }
 };
 
-class InputPage extends React.Component {
+class TreeBtn extends React.Component {
   state = { inputValue: "" };
   updateInputValue = (evt) => {
     this.setState({ inputValue: evt.target.value });
@@ -53,7 +63,7 @@ class InputPage extends React.Component {
           className="input"
           placeholder="What am I looking for ?"
           value={this.state.inputValue}
-          onChange={(evt) => this.updateInputValue(evt)}
+          onChange={(evt) => this.updateUrl(evt)}
         />
       </div>
     );
@@ -108,7 +118,6 @@ class ResultsPage extends Component {
               queryString: query,
               error: false,
             });
-            document.getElementById("search").value = query;
 
             // const searchParams = new URLSearchParams();
             //
@@ -127,6 +136,7 @@ class ResultsPage extends Component {
   };
 
   componentDidMount() {
+    console.log(this.props);
     return this.paintTree(this.props.query);
   }
 
@@ -148,7 +158,7 @@ class ResultsPage extends Component {
             key={row.rank}
             rank={row.rank}
             data={row.items}
-            onClick={this.paintTree}
+            onClick={this.props.onClick}
           />
         ))}
       </React.Fragment>
