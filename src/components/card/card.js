@@ -27,7 +27,7 @@ function Card(props) {
 				<div
 					data-id={props.id}
 					className="card__hierarchy-btn"
-					onClick={() => props.handleHierarchyClick(props.id)}
+					onClick={(e) => props.onClick(e)}
 				>
 					<img src="https://via.placeholder.com/15" alt="hierarchy" />
 				</div>

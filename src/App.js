@@ -22,14 +22,45 @@ function getParams(location) {
 
 const MainPage = props => {
   const { query, history } = props;
-  console.log("mainpage");
 
   return (
-    <Tree history={history} query={query} />
+    <div>
+      <InputPage history={history} />
+      <h2>{`My query: ${query}`}</h2>
+      <ResultsPage query={query} />
+    </div>
   );
 };
 
-class Tree extends Component {
+class InputPage extends React.Component {
+  state = { inputValue: "" };
+  updateInputValue = (evt) => {
+    this.setState({ inputValue: evt.target.value });
+    console.log(this.state);
+  }
+  updateUrl = (evt) => {
+    const url = evt.target.value;
+    console.log("upd");
+    this.props.history.push(`?${url}`);
+  };
+  render() {
+    return (
+      <div>
+        <input
+          name="inputSearch"
+          id="search"
+          type="text"
+          className="input"
+          placeholder="What am I looking for ?"
+          value={this.state.inputValue}
+          onChange={(evt) => this.updateInputValue(evt)}
+        />
+      </div>
+    );
+  }
+}
+
+class ResultsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,17 +103,18 @@ class Tree extends Component {
             let rank = result.children[0].rank;
   					let children = result.children;
 
-            // this.setState({
-            //   rows: [...this.state.rows, {rank: rank, items: children}],
-            //   queryString: query,
-            //   error: false,
-            // });
+            this.setState({
+              rows: [...this.state.rows, {rank: rank, items: children}],
+              queryString: query,
+              error: false,
+            });
+            document.getElementById("search").value = query;
 
             // const searchParams = new URLSearchParams();
             //
             // searchParams.set("taxon", query || "");
 
-            this.props.history.push(`?mode=tree&taxon=${query}`);
+            // this.props.history.push(`?mode=tree&taxon=${query}`);
             console.log(this.state);
           },
           (error) => {
@@ -95,16 +127,12 @@ class Tree extends Component {
   };
 
   componentDidMount() {
-    this.props.history.push(`?mode=tree`);
     return this.paintTree(this.props.query);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log("scu");
-    console.log(this.props);
-    console.log(nextProps);
-    return nextProps != this.props;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return nextProps != this.props;
+  // }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.query !== this.props.query) {
