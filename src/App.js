@@ -7,7 +7,6 @@ import Modal from "./components/modal/modal.js";
 
 function getParams(location) {
   const searchParams = new URLSearchParams(location.search);
-  console.log(searchParams.get("taxon"));
 
   return {
     query: searchParams.get("taxon") || ""
@@ -31,64 +30,55 @@ class MainPage extends Component {
 
   updateUrl = (evt) => {
     const url = evt.target.dataset.id;
-    console.log("url: ", url);
+
     this.props.history.push(`?taxon=${url}`);
   };
 
   render() {
     return (
-      <ResultsPage query={this.props.query} onClick={this.updateUrl}/>
+      <ResultsPage query={this.props.query} onClick={this.updateUrl} />
     );
   }
 };
-
-class TreeBtn extends React.Component {
-  state = { inputValue: "" };
-  updateInputValue = (evt) => {
-    this.setState({ inputValue: evt.target.value });
-    console.log(this.state);
-  }
-  updateUrl = (evt) => {
-    const url = evt.target.value;
-    console.log("upd");
-    this.props.history.push(`?${url}`);
-  };
-  render() {
-    return (
-      <div>
-        <input
-          name="inputSearch"
-          id="search"
-          type="text"
-          className="input"
-          placeholder="What am I looking for ?"
-          value={this.state.inputValue}
-          onChange={(evt) => this.updateUrl(evt)}
-        />
-      </div>
-    );
-  }
-}
 
 class ResultsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeItems: [],
       queryString: "",
-      rows: [
-        {
-          rank: "",
-          items: [],
-        }
-      ],
+      rows: [],
       loading: false,
       error: false,
     };
   }
 
-  paintTree = query => {
-    console.log(query);
+  showChildren = childrenArrays => {
+    fetch("https://biotax-api.herokuapp.com/api/kingdoms")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            rows: [{rank: "Kingdom", items: result}],
+          });
 
+          for (let i = 0; i < childrenArrays.length; i++) {
+            this.setState({
+              rows: [...this.state.rows, {rank: "", items: childrenArrays[i]}],
+            });
+          }
+
+          console.log(this.state.rows);
+        },
+        (error) => {
+          this.setState({
+            error
+          });
+        }
+      )
+  }
+
+  paintTree = query => {
     if (!query) {
       fetch("https://biotax-api.herokuapp.com/api/kingdoms")
         .then(res => res.json())
@@ -97,7 +87,6 @@ class ResultsPage extends Component {
             this.setState({
               rows: [{rank: "Kingdom", items: result}],
             });
-            console.log(this.state);
           },
           (error) => {
             this.setState({
@@ -106,37 +95,95 @@ class ResultsPage extends Component {
           }
         )
     } else {
-      fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
-        .then(res => res.json())
-        .then(
-          (result) => {
-            let rank = result.children[0].rank;
-  					let children = result.children;
+      if (this.state.rows.length) {
+        fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
+          .then(res => res.json())
+          .then(
+            (result) => {
+              let rank = result.children[0].rank;
+    					let children = result.children;
 
-            this.setState({
-              rows: [...this.state.rows, {rank: rank, items: children}],
-              queryString: query,
-              error: false,
-            });
+              this.setState({
+                rows: [...this.state.rows, {rank: rank, items: children}],
+                queryString: query,
+                error: false,
+              });
 
-            // const searchParams = new URLSearchParams();
-            //
-            // searchParams.set("taxon", query || "");
+              // const searchParams = new URLSearchParams();
+              // searchParams.set("taxon", query || "");
+              // this.props.history.push(`?mode=tree&taxon=${query}`);
+            },
+            (error) => {
+              this.setState({
+                error
+              });
+            }
+          )
+      } else {
+        fetch(`https://biotax-api.herokuapp.com/api/taxon/${query}`)
+          .then(data => data.json())
+          .then(
+            (data) => {
+              let activeItems = data.ancestors;
+              activeItems.push(parseInt(query));
 
-            // this.props.history.push(`?mode=tree&taxon=${query}`);
-            console.log(this.state);
-          },
-          (error) => {
-            this.setState({
-              error
-            });
-          }
-        )
+
+              var childrenArrays = [];
+
+              function getChildren(activeItems, childrenArrays, callback) {
+                const url = `https://biotax-api.herokuapp.com/api/children/${activeItems[0]}`;
+
+                fetch(url)
+                  .then(data => data.json())
+                  .then(
+                    (data) => {
+                      childrenArrays.push(data.children);
+                      activeItems.shift();
+
+                      if (activeItems.length) {
+                				getChildren(activeItems, childrenArrays, callback);
+                      } else {
+                        callback(childrenArrays);
+                      }
+                    }
+                  )
+              }
+
+              getChildren(activeItems, childrenArrays, this.showChildren);
+
+
+                // async function f1() {
+                //   for (let i = 0; i < activeItems.length; i++) {
+                //     var x = await fetch(`https://biotax-api.herokuapp.com/api/children/${activeItems[i]}`);
+                //     var xJson = await x.json();
+                //     console.log(x); // 10
+                //   }
+                // f1();
+
+
+                // fetch(`https://biotax-api.herokuapp.com/api/children/${activeItems[i]}`)
+                //   .then(res => res.json())
+                //   .then(
+                //     (res) => {
+                //       this.setState({
+                //         rows: [...this.state.rows, {rank: res.rank, items: res.children}],
+                //       });
+                //       console.log(this.state.rows);
+                //     }
+                //   )
+
+            },
+            (error) => {
+              this.setState({
+                error
+              });
+            }
+          )
+      }
     }
   };
 
   componentDidMount() {
-    console.log(this.props);
     return this.paintTree(this.props.query);
   }
 
