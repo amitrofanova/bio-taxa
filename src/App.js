@@ -63,12 +63,13 @@ class ResultsPage extends Component {
           });
 
           for (let i = 0; i < childrenArrays.length; i++) {
+            let childrenArray = childrenArrays[i];
+            let rank = childrenArray[0].rank;
+
             this.setState({
-              rows: [...this.state.rows, {rank: "", items: childrenArrays[i]}],
+              rows: [...this.state.rows, {rank: rank, items: childrenArray}],
             });
           }
-
-          console.log(this.state.rows);
         },
         (error) => {
           this.setState({
@@ -124,11 +125,10 @@ class ResultsPage extends Component {
           .then(data => data.json())
           .then(
             (data) => {
+              let childrenArrays = [];
+
               let activeItems = data.ancestors;
               activeItems.push(parseInt(query));
-
-
-              var childrenArrays = [];
 
               function getChildren(activeItems, childrenArrays, callback) {
                 const url = `https://biotax-api.herokuapp.com/api/children/${activeItems[0]}`;
@@ -150,28 +150,6 @@ class ResultsPage extends Component {
               }
 
               getChildren(activeItems, childrenArrays, this.showChildren);
-
-
-                // async function f1() {
-                //   for (let i = 0; i < activeItems.length; i++) {
-                //     var x = await fetch(`https://biotax-api.herokuapp.com/api/children/${activeItems[i]}`);
-                //     var xJson = await x.json();
-                //     console.log(x); // 10
-                //   }
-                // f1();
-
-
-                // fetch(`https://biotax-api.herokuapp.com/api/children/${activeItems[i]}`)
-                //   .then(res => res.json())
-                //   .then(
-                //     (res) => {
-                //       this.setState({
-                //         rows: [...this.state.rows, {rank: res.rank, items: res.children}],
-                //       });
-                //       console.log(this.state.rows);
-                //     }
-                //   )
-
             },
             (error) => {
               this.setState({
