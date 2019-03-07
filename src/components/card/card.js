@@ -5,7 +5,7 @@ import "./card.sass";
 function Card(props) {
 	return (
 		<div className="card">
-			<div className="card__inner">
+			<Link to={`/taxon/${props.id}`} className="card__inner">
 				<div className="card__title">
 					{props.title}
 				</div>
@@ -17,7 +17,7 @@ function Card(props) {
 				<div className="card__description">
 					{props.description} description
 				</div>
-			</div>
+			</Link>
 
 			<div className="card__controllers">
 				<div className="card__wiki-btn">
