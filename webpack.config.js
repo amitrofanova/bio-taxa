@@ -16,6 +16,12 @@ module.exports = {
       {
         test: /\.sass$/,
         use: ["style-loader", "css-loader", "sass-loader"]
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          "file-loader"
+        ]
       }
     ]
   },
@@ -34,6 +40,6 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin()
   ]
 };

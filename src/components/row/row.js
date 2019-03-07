@@ -9,6 +9,8 @@ function Row(props) {
 				<Card
 					key={i.id}
 					id={i.id}
+					name={i.name}
+					image={i.image_url}
 					title={i.title}
 					description={i.description}
 					onClick={props.onClick}

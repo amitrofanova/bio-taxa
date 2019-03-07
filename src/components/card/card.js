@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./card.sass";
+import WikiIcon from "../../resources/images/wiki-icon.svg";
+import HierarchyIcon from "../../resources/images/hierarchy-icon.png";
 
 function Card(props) {
 	return (
@@ -11,7 +13,7 @@ function Card(props) {
 				</div>
 
 				<div className="card__img">
-					<img src="https://via.placeholder.com/150" alt="testimg" />
+					<img src={`${props.image}`} alt={`${props.name}`} />
 				</div>
 
 				<div className="card__description">
@@ -21,7 +23,7 @@ function Card(props) {
 
 			<div className="card__controllers">
 				<div className="card__wiki-btn">
-					<img src="https://via.placeholder.com/15" alt="read on wikipedia" />
+					<img src={WikiIcon} alt="read on wikipedia" />
 				</div>
 
 				<div
@@ -29,7 +31,7 @@ function Card(props) {
 					className="card__hierarchy-btn"
 					onClick={(evt) => props.onClick(evt)}
 				>
-					<img src="https://via.placeholder.com/15" alt="hierarchy" />
+					<img src={HierarchyIcon} alt="hierarchy" />
 				</div>
 			</div>
 		</div>
