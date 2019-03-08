@@ -8,13 +8,15 @@ function Card(props) {
 	return (
 		<div className="card">
 			<Link to={`/taxon/${props.id}`} className="card__inner">
-				<div className="card__title">
-					{props.title}
+				<div className={props.image ? "card__title" : "card__title_no-img"}>
+					{props.title || props.name}
 				</div>
 
-				<div className="card__img">
-					<img src={`${props.image}`} alt={`${props.name}`} />
-				</div>
+				{props.image &&
+					<div className="card__img">
+						<img src={`${props.image}`} alt={`${props.name}`} />
+					</div>
+				}
 
 				<div className="card__description">
 					{props.description} description

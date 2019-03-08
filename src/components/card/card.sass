@@ -2,6 +2,7 @@ $border-color: darkslategray
 
 .card
 	position: relative
+	display: flex
 	max-width: 350px
 	flex-basis: 19%
 	padding: 0 10px
@@ -9,12 +10,14 @@ $border-color: darkslategray
 
 .card__inner
 	position: relative
-	height: 100%
+	// height: 100%
 	display: flex
+	flex-basis: 100%
 	flex-direction: column
 	border: 2px solid $border-color
 	border-bottom: none
 	text-align: center
+	text-decoration: none
 	cursor: pointer
 	&:hover
 		.card__title, .card__img
@@ -32,7 +35,12 @@ $border-color: darkslategray
 	background-color: #fff
 	font-size: 16px
 	font-weight: 700
+	color: #000
 	z-index: 1
+
+.card__title_no-img
+	height: 160px
+	line-height: 160px
 
 .card__controllers
 	width: calc(100% - 20px)
