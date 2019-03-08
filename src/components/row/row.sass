@@ -1,11 +1,6 @@
-.hierarchy
-	display: flex
-	flex-wrap: nowrap
-	position: relative
-	background-color: #dfdfdf
-
-.hierarchy__row
+.row
 	padding-top: 8px
+	padding-bottom: 8px
 	position: relative
 	width: 100%
 	display: flex
@@ -17,11 +12,11 @@
 	&:last-child
 		padding-bottom: 25px
 
-.hierarchy__row_first
+.row_first
 	height: 100%
-	flex-wrap: nowrap
+	flex-wrap: wrap
 	padding-top: 15px
-	.card
+	.item
 		margin: 10px 0
 		width: 23%
 		flex: none
@@ -29,13 +24,13 @@
 		&:hover
 			.item__title, .item__img
 				visibility: visible
-	.card__description
+	.item__description
 		position: relative
 		top: auto
 		height: auto
 		visibility: visible
 
-.hierarchy__row-subcontainer
+.row__subcontainer
 	flex-basis: 32%
 	display: flex
 	justify-content: space-between
@@ -43,5 +38,5 @@
 	.item
 		flex-basis: 24%
 
-.hierarchy__row-subcontainer_middle
+.subcontainer_middle
 	justify-content: center
