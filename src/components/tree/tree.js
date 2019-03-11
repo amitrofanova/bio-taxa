@@ -41,6 +41,68 @@ class Tree extends Component {
       )
   }
 
+	fetchOneChildRow = query => {
+		fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
+			.then(res => res.json())
+			.then(
+				(result) => {
+					let rank = result.children[0].rank;
+					let children = result.children;
+
+					this.setState({
+						rows: [...this.state.rows, {rank: rank, items: children}],
+						queryString: query,
+						height: this.state.rows.length,
+						error: false,
+					});
+				},
+				(error) => {
+					this.setState({
+						error
+					});
+				}
+			)
+	}
+
+	fetchAllRowsByQuery = query => {
+		fetch(`https://biotax-api.herokuapp.com/api/taxon/${query}`)
+			.then(data => data.json())
+			.then(
+				(data) => {
+					let childrenArrays = [];
+
+					let activeItems = data.ancestors;
+					activeItems.push(parseInt(query));
+
+					function getChildren(activeItems, childrenArrays, callback) {
+						const url = `https://biotax-api.herokuapp.com/api/children/${activeItems[0]}`;
+
+						fetch(url)
+							.then(data => data.json())
+							.then(
+								(data) => {
+									childrenArrays.push(data.children);
+									activeItems.shift();
+
+									if (activeItems.length) {
+										getChildren(activeItems, childrenArrays, callback);
+									} else {
+										callback(childrenArrays);
+									}
+								}
+							)
+					}
+
+					getChildren(activeItems, childrenArrays, this.showChildren);
+				},
+				(error) => {
+					this.setState({
+						error
+					});
+				}
+			)
+	}
+
   paintTree = query => {
     if (!query) {
       fetch("https://biotax-api.herokuapp.com/api/kingdoms")
@@ -59,67 +121,9 @@ class Tree extends Component {
         )
     } else {
       if (this.state.rows.length) {
-        fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
-          .then(res => res.json())
-          .then(
-            (result) => {
-              let rank = result.children[0].rank;
-    					let children = result.children;
-
-              this.setState({
-                rows: [...this.state.rows, {rank: rank, items: children}],
-                queryString: query,
-								height: this.state.rows.length,
-                error: false,
-              });
-
-              // const searchParams = new URLSearchParams();
-              // searchParams.set("taxon", query || "");
-              // this.props.history.push(`?mode=tree&taxon=${query}`);
-            },
-            (error) => {
-              this.setState({
-                error
-              });
-            }
-          )
+        this.fetchOneChildRow(query);
       } else {
-        fetch(`https://biotax-api.herokuapp.com/api/taxon/${query}`)
-          .then(data => data.json())
-          .then(
-            (data) => {
-              let childrenArrays = [];
-
-              let activeItems = data.ancestors;
-              activeItems.push(parseInt(query));
-
-              function getChildren(activeItems, childrenArrays, callback) {
-                const url = `https://biotax-api.herokuapp.com/api/children/${activeItems[0]}`;
-
-                fetch(url)
-                  .then(data => data.json())
-                  .then(
-                    (data) => {
-                      childrenArrays.push(data.children);
-                      activeItems.shift();
-
-                      if (activeItems.length) {
-                				getChildren(activeItems, childrenArrays, callback);
-                      } else {
-                        callback(childrenArrays);
-                      }
-                    }
-                  )
-              }
-
-              getChildren(activeItems, childrenArrays, this.showChildren);
-            },
-            (error) => {
-              this.setState({
-                error
-              });
-            }
-          )
+        this.fetchAllRowsByQuery(query);
       }
     }
 };
@@ -127,10 +131,6 @@ class Tree extends Component {
   componentDidMount() {
     return this.paintTree(this.props.query);
   }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return nextProps != this.props;
-  // }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.query !== this.props.query) {
