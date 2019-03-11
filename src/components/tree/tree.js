@@ -8,6 +8,7 @@ class Tree extends Component {
     this.state = {
       activeItems: [],
       queryString: "",
+			height: 0,
       rows: [],
       loading: false,
       error: false,
@@ -68,6 +69,7 @@ class Tree extends Component {
               this.setState({
                 rows: [...this.state.rows, {rank: rank, items: children}],
                 queryString: query,
+								height: this.state.rows.length,
                 error: false,
               });
 
@@ -120,7 +122,7 @@ class Tree extends Component {
           )
       }
     }
-  };
+};
 
   componentDidMount() {
     return this.paintTree(this.props.query);
@@ -139,11 +141,12 @@ class Tree extends Component {
   render() {
     return (
       <React.Fragment>
-        {this.state.rows.map(row => (
+        {this.state.rows.map((row, i) => (
           <Row
             key={row.rank}
             rank={row.rank}
             data={row.items}
+						row={i}
             onClick={this.props.onClick}
           />
         ))}

@@ -9,7 +9,8 @@ function getParams(location) {
   const searchParams = new URLSearchParams(location.search);
 
   return {
-    query: searchParams.get("taxon") || ""
+    query: searchParams.get("taxon") || "",
+    row: searchParams.get("row")
   };
 }
 
@@ -24,8 +25,9 @@ function MainPage(props) {
 
   function updateUrl(evt) {
     const url = evt.target.dataset.id;
+    const row = parseInt(evt.target.dataset.row) + 1;
 
-    props.history.push(`?taxon=${url}`);
+    props.history.push(`?taxon=${url}&row=${row}`);
   };
 
   return (
@@ -43,9 +45,9 @@ class App extends Component {
             <Route
               path="/"
               render={({ location, history }) => {
-                const { query } = getParams(location);
+                const { query, row } = getParams(location);
 
-                return <MainPage query={query} history={history} />;
+                return <MainPage query={query} history={history} row={row}/>;
               }}
             />
 					</Switch>

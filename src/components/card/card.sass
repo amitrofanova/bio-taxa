@@ -39,6 +39,7 @@ $border-color: darkslategray
 	z-index: 1
 
 .card__title_no-img
+	@extend .card__title
 	height: 160px
 	line-height: 160px
 
@@ -48,6 +49,7 @@ $border-color: darkslategray
 	position: absolute
 	bottom: 0
 	left: 10px
+	z-index: 2
 	& > div, & > a
 		flex-basis: 50%
 		border: 2px solid $border-color

@@ -14,6 +14,7 @@ function Row(props) {
 					image={i.image_url}
 					title={i.title}
 					description={i.description}
+					row={props.row}
 					onClick={props.onClick}
 				/>
 			))}

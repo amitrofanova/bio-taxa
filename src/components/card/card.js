@@ -19,7 +19,7 @@ function Card(props) {
 				}
 
 				<div className="card__description">
-					{props.description} description
+					{props.description || "Taxon has no description"}
 				</div>
 			</Link>
 
@@ -30,6 +30,7 @@ function Card(props) {
 
 				<div
 					data-id={props.id}
+					data-row={props.row}
 					className="card__hierarchy-btn"
 					onClick={(evt) => props.onClick(evt)}
 				>
