@@ -15,7 +15,7 @@ class Tree extends Component {
     };
   }
 
-  showChildren = childrenArrays => {
+  setRowsState = childrenArrays => {
     fetch("https://biotax-api.herokuapp.com/api/kingdoms")
       .then(res => res.json())
       .then(
@@ -38,8 +38,25 @@ class Tree extends Component {
             error
           });
         }
-      )
+      );
   }
+
+	fetchKingdoms = () =>  {
+		fetch("https://biotax-api.herokuapp.com/api/kingdoms")
+			.then(res => res.json())
+			.then(
+				(result) => {
+					this.setState({
+						rows: [{rank: "Kingdom", items: result}],
+					});
+				},
+				(error) => {
+					this.setState({
+						error
+					});
+				}
+			);
+	}
 
 	fetchOneChildRow = query => {
 		fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
@@ -61,7 +78,7 @@ class Tree extends Component {
 						error
 					});
 				}
-			)
+			);
 	}
 
 	fetchAllRowsByQuery = query => {
@@ -90,41 +107,29 @@ class Tree extends Component {
 										callback(childrenArrays);
 									}
 								}
-							)
+							);
 					}
 
-					getChildren(activeItems, childrenArrays, this.showChildren);
+					getChildren(activeItems, childrenArrays, this.setRowsState);
 				},
 				(error) => {
 					this.setState({
 						error
 					});
 				}
-			)
+			);
 	}
 
   paintTree = query => {
-    if (!query) {
-      fetch("https://biotax-api.herokuapp.com/api/kingdoms")
-        .then(res => res.json())
-        .then(
-          (result) => {
-            this.setState({
-              rows: [{rank: "Kingdom", items: result}],
-            });
-          },
-          (error) => {
-            this.setState({
-              error
-            });
-          }
-        )
-    } else {
-      if (this.state.rows.length) {
+    if (query) {
+			if (this.state.rows.length) {
         this.fetchOneChildRow(query);
       } else {
         this.fetchAllRowsByQuery(query);
       }
+    } else {
+			// if there are no url parameters, render home page
+      this.fetchKingdoms();
     }
 };
 
