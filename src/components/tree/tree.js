@@ -122,27 +122,32 @@ class Tree extends Component {
 
   paintTree = (query, row) => {
     if (query) {
+			// url contains query
 			const rowsCount = this.state.rows.length;
 
 			if (rowsCount) {
+				// tree already contains rows
 				if (row < rowsCount) {
-						let newRowsArr = [...this.state.rows];
-						newRowsArr.splice(row);
+					// card on higher row has been clicked
+					// need to remove all rows lower this row and add one children row
+					let newRowsArr = [...this.state.rows];
 
-						this.setState({
-							rows: newRowsArr,
-						});
+					newRowsArr.splice(row);
 
-						this.fetchOneChildRow(query);
+					this.setState({
+						rows: newRowsArr,
+					});
+
+					this.fetchOneChildRow(query);
 				} else
+				// just add one row to the tree
         	this.fetchOneChildRow(query);
-      } else {
+      } else
+				// url contains query but tree is empty (link was shared)
         this.fetchAllRowsByQuery(query);
-      }
-    } else {
-			// if there are no url parameters, render home page
+    } else
+			// there are no url parameters, render home page
       this.fetchKingdoms();
-    }
 };
 
   componentDidMount() {

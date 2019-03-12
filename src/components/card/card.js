@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./card.sass";
-// import WikiIcon from "../../resources/images/wiki-icon.svg";
-// import HierarchyIcon from "../../resources/images/hierarchy-icon.png";
 
 function Card(props) {
 	return (
@@ -24,8 +22,7 @@ function Card(props) {
 			</Link>
 
 			<div className="card__controllers">
-				<div className="card__wiki-btn">
-				</div>
+				<div className="card__wiki-btn"></div>
 
 				<div
 					data-id={props.id}
