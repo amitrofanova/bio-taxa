@@ -120,10 +120,22 @@ class Tree extends Component {
 			);
 	}
 
-  paintTree = query => {
+  paintTree = (query, row) => {
     if (query) {
-			if (this.state.rows.length) {
-        this.fetchOneChildRow(query);
+			const rowsCount = this.state.rows.length;
+
+			if (rowsCount) {
+				if (row < rowsCount) {
+						let newRowsArr = [...this.state.rows];
+						newRowsArr.splice(row);
+
+						this.setState({
+							rows: newRowsArr,
+						});
+
+						this.fetchOneChildRow(query);
+				} else
+        	this.fetchOneChildRow(query);
       } else {
         this.fetchAllRowsByQuery(query);
       }
@@ -134,12 +146,12 @@ class Tree extends Component {
 };
 
   componentDidMount() {
-    return this.paintTree(this.props.query);
+    return this.paintTree(this.props.query, this.props.row);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.query !== this.props.query) {
-      return this.paintTree(nextProps.query);
+      return this.paintTree(nextProps.query, nextProps.row);
     }
   }
 

@@ -10,7 +10,7 @@ function getParams(location) {
 
   return {
     query: searchParams.get("taxon") || "",
-    row: searchParams.get("row")
+    activeRow: searchParams.get("row")
   };
 }
 
@@ -25,13 +25,13 @@ function MainPage(props) {
 
   function updateUrl(evt) {
     const url = evt.target.dataset.id;
-    const row = parseInt(evt.target.dataset.row) + 1;
+    const activeRow = parseInt(evt.target.dataset.row) + 1;
 
-    props.history.push(`?taxon=${url}&row=${row}`);
+    props.history.push(`?taxon=${url}&row=${activeRow}`);
   };
 
   return (
-    <Tree query={props.query} onClick={updateUrl} />
+    <Tree query={props.query} row={props.row} onClick={updateUrl} />
   );
 };
 
@@ -45,9 +45,9 @@ class App extends Component {
             <Route
               path="/"
               render={({ location, history }) => {
-                const { query, row } = getParams(location);
+                const { query, activeRow } = getParams(location);
 
-                return <MainPage query={query} history={history} row={row}/>;
+                return <MainPage query={query} row={activeRow} history={history} />;
               }}
             />
 					</Switch>
