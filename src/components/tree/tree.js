@@ -160,7 +160,7 @@ class Tree extends Component {
       <React.Fragment>
         {this.state.rows.map((row, i) => (
           <Row
-            key={row.rank}
+            key={row.rank + i}
             rank={row.rank}
             data={row.items}
 						row={i}
