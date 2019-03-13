@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./modal.sass";
-// import Close from "../close/close.js";
-import "../close/close.sass";
+import Close from "../close/close.js";
 import WikiIcon from "../../resources/images/wiki-icon.svg";
 
 function selectText(node) {
@@ -48,6 +47,7 @@ class Modal extends Component {
 	}
 
 	browseBack(e) {
+		console.log("in");
 		e.stopPropagation();
 		this.props.history.goBack();
 	};
@@ -139,7 +139,7 @@ class Modal extends Component {
 							</div>
 						</div>
 
-						<div className="close modal__close" onClick={(e) => this.browseBack(e)}></div>
+						<Close className="modal__close" onClick={(e) => this.browseBack(e)} />
 					</div>
 				</div>
 			);
