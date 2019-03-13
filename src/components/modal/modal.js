@@ -3,6 +3,26 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./modal.sass";
 // import Close from "../close/close.js";
 import "../close/close.sass";
+import WikiIcon from "../../resources/images/wiki-icon.svg";
+
+function selectText(node) {
+	console.log(node);
+    node = document.getElementById(node);
+
+    if (document.body.createTextRange) {
+        const range = document.body.createTextRange();
+        range.moveToElementText(node);
+        range.select();
+    } else if (window.getSelection) {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    } else {
+        console.warn("Could not select text in node: Unsupported browser.");
+    }
+}
 
 class Modal extends Component {
 	constructor(props) {
@@ -13,6 +33,19 @@ class Modal extends Component {
 			data: [],
 		};
   }
+
+	shareLink() {
+		let sharingPopup = document.createElement("div");
+
+		sharingPopup.className = "modal__share-dialog share";
+		sharingPopup.innerHTML = `
+			<div class="share__title">Copy link below:</div>
+			<div class="share__url" id="sharing-link">${window.location.href}</div>
+		`;
+
+		document.getElementById("sharing-btn").appendChild(sharingPopup);
+		selectText("sharing-link")
+	}
 
 	browseBack(e) {
 		e.stopPropagation();
@@ -43,6 +76,7 @@ class Modal extends Component {
 	render() {
 		const { error, isLoaded, data } = this.state;
 		const taxonId = this.props.match.params.id;
+		const sharingLink = this.props.match.url;
 
 		if (!taxonId) return null;
 
@@ -88,13 +122,13 @@ class Modal extends Component {
 
 						<div className="modal__controls">
 							<a href={`${data.url}`} target="_blank" className="modal__control-btn">
-								<img src="assets/images/wiki-icon.svg" alt="read on wikipedia" />
+								<img src={WikiIcon} alt="read on wikipedia" />
 								Read more
 							</a>
 
-							<a href="" target="_blank" className="modal__control-btn">
+							<div id="sharing-btn" onClick={this.shareLink} className="modal__control-btn">
 								Share
-							</a>
+							</div>
 
 							<div className="modal__control-btn" id="show-hierarchy">
 								Close modal and show hierarchy
@@ -105,7 +139,6 @@ class Modal extends Component {
 							</div>
 						</div>
 
-						// TODO: add separate component
 						<div className="close modal__close" onClick={(e) => this.browseBack(e)}></div>
 					</div>
 				</div>

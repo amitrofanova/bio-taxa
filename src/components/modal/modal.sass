@@ -88,15 +88,20 @@ $middlegreen: #3B8935
 
 .modal__control-btn
 	display: inline-block
+	position: relative
 	width: max-content
 	padding: 5px 10px
 	border: 4px solid $lightgreen
+	background-color: #fff
+	font: inherit
 	color: #000
+	text-decoration: none
 	cursor: pointer
 	&:hover
 		color: green
 	img
 		width: 15px
+		padding-right: 10px
 		vertical-align: baseline
 
 .modal__control-btn_unhoverable
@@ -104,6 +109,31 @@ $middlegreen: #3B8935
 	&:hover
 		color: initial
 		cursor: default
+
+.modal__share-dialog
+	position: absolute
+	left: 0
+	bottom: 150%
+
+.share
+	width: 300px
+	padding: 8px 10px
+	background-color: #eee
+	font-size: .8rem
+	&::after
+		position: absolute
+		top: 100%
+		left: 10px
+		border: 10px solid
+		border-color: #eee transparent transparent transparent
+		content: ""
+
+
+.share__title
+	margin-bottom: 10px
+
+.share__url
+	font-family: "Courier New", monospace
 
 .modal__inner_minimizing
 	top: 20px
