@@ -26,21 +26,6 @@ class Modal extends Component {
 		this.setState({showSharingPopup: !this.state.showSharingPopup});
 	}
 
-	shareLink() {
-		// let sharingPopup = document.createElement("div");
-		//
-		// sharingPopup.className = "modal__share-dialog share";
-		// sharingPopup.innerHTML = `
-		// 	<div class="share__title">Copy link below:</div>
-		// 	<div class="share__url" id="sharing-link">${window.location.href}</div>
-		// `;
-		//
-		// document.getElementById("sharing-btn").appendChild(sharingPopup);
-
-		{this.toggleSharingPopup}
-		selectText("sharing-link");
-	}
-
 	componentDidMount() {
 		const idParam = this.props.match.params.id;
 

@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import Close from "../close/close.js";
 import "./sharing.sass";
 
-function selectText(node) {
-  node = document.getElementById(node);
+function selectText(nodeId) {
+  let node = document.getElementById(nodeId);
 
   if (document.body.createTextRange) {
       const range = document.body.createTextRange();
@@ -16,7 +16,7 @@ function selectText(node) {
       selection.removeAllRanges();
       selection.addRange(range);
   } else {
-      console.warn("Could not select text in node: Unsupported browser.");
+      console.warn("Unable to select text.");
   }
 }
 
@@ -27,7 +27,7 @@ class Sharing extends Component {
 
 	render() {
 		return(
-			<div className={`sharing ${this.props.className}`} onClick={this.props.onClick} >
+			<div className={`sharing ${this.props.className}`} onClick={(e) => e.stopPropagation()} >
 				<div className="sharing__title">Copy link below:</div>
 				<div className="sharing__url" id="sharing-link">{window.location.href}</div>
 				<Close className="sharing__close" onClick={this.props.handleClose}/>
