@@ -2,26 +2,9 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./modal.sass";
 import Close from "../close/close.js";
+import Sharing from "../sharing/sharing.js";
 import WikiIcon from "../../resources/images/wiki-icon.svg";
 
-function selectText(node) {
-	console.log(node);
-    node = document.getElementById(node);
-
-    if (document.body.createTextRange) {
-        const range = document.body.createTextRange();
-        range.moveToElementText(node);
-        range.select();
-    } else if (window.getSelection) {
-        const selection = window.getSelection();
-        const range = document.createRange();
-        range.selectNodeContents(node);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    } else {
-        console.warn("Could not select text in node: Unsupported browser.");
-    }
-}
 
 class Modal extends Component {
 	constructor(props) {
@@ -30,27 +13,33 @@ class Modal extends Component {
 			error: null,
 			isLoaded: false,
 			data: [],
+			showSharingPopup: false,
 		};
   }
 
-	shareLink() {
-		let sharingPopup = document.createElement("div");
-
-		sharingPopup.className = "modal__share-dialog share";
-		sharingPopup.innerHTML = `
-			<div class="share__title">Copy link below:</div>
-			<div class="share__url" id="sharing-link">${window.location.href}</div>
-		`;
-
-		document.getElementById("sharing-btn").appendChild(sharingPopup);
-		selectText("sharing-link")
-	}
-
 	browseBack(e) {
-		console.log("in");
 		e.stopPropagation();
 		this.props.history.goBack();
-	};
+	}
+
+	toggleSharingPopup() {
+		this.setState({showSharingPopup: !this.state.showSharingPopup});
+	}
+
+	shareLink() {
+		// let sharingPopup = document.createElement("div");
+		//
+		// sharingPopup.className = "modal__share-dialog share";
+		// sharingPopup.innerHTML = `
+		// 	<div class="share__title">Copy link below:</div>
+		// 	<div class="share__url" id="sharing-link">${window.location.href}</div>
+		// `;
+		//
+		// document.getElementById("sharing-btn").appendChild(sharingPopup);
+
+		{this.toggleSharingPopup}
+		selectText("sharing-link");
+	}
 
 	componentDidMount() {
 		const idParam = this.props.match.params.id;
@@ -126,8 +115,16 @@ class Modal extends Component {
 								Read more
 							</a>
 
-							<div id="sharing-btn" onClick={this.shareLink} className="modal__control-btn">
+							<div
+								id="sharing-btn"
+								className="modal__control-btn"
+								onClick={(e) => this.toggleSharingPopup(e)}
+							>
 								Share
+								{this.state.showSharingPopup ?
+									<Sharing className="modal__sharing" handleClose={(e) => this.toggleSharingPopup(e)}/>
+									: null
+								}
 							</div>
 
 							<div className="modal__control-btn" id="show-hierarchy">
