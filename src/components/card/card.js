@@ -22,7 +22,7 @@ function Card(props) {
 			</Link>
 
 			<div className="card__controllers">
-				<div className="card__wiki-btn"></div>
+				<a href={`${props.url}`} target="_blank" className="card__wiki-btn"></a>
 
 				<div
 					data-id={props.id}
