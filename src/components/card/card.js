@@ -18,13 +18,14 @@ function Card(props) {
 
 				<div className="card__description">
 					{props.description || "Taxon has no description"}
+					{props.childrenCount}
 				</div>
 			</Link>
 
 			<div className="card__controllers">
 				<a href={`${props.url}`} target="_blank" className="card__wiki-btn"></a>
 
-				{props.childrenCount ? (
+				{(!props.row || props.childrenCount) ? (
 					<div
 						data-id={props.id}
 						data-row={props.row}
