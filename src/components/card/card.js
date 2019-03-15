@@ -24,13 +24,17 @@ function Card(props) {
 			<div className="card__controllers">
 				<a href={`${props.url}`} target="_blank" className="card__wiki-btn"></a>
 
-				<div
-					data-id={props.id}
-					data-row={props.row}
-					className="card__hierarchy-btn"
-					onClick={(evt) => props.onClick(evt)}
-				>
-				</div>
+				{props.childrenCount ? (
+					<div
+						data-id={props.id}
+						data-row={props.row}
+						className="card__hierarchy-btn"
+						onClick={(evt) => props.onClick(evt)}
+					>
+					</div>
+				) : (
+					<div>Leaf</div>
+				)}
 			</div>
 		</div>
 	);

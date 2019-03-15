@@ -18,6 +18,7 @@ function Row(props) {
 						title={i.title}
 						description={i.description}
 						url={i.url}
+						childrenCount={i.total_children}
 						row={props.row}
 						onClick={props.onClick}
 					/>

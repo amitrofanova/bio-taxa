@@ -155,6 +155,7 @@ class Tree extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(this.state.rows);
     if (nextProps.query !== this.props.query) {
       return this.paintTree(nextProps.query, nextProps.row);
     }
