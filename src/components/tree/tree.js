@@ -6,11 +6,7 @@ class Tree extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItems: [],
-      queryString: "",
-			height: 0,
       rows: [],
-      loading: false,
       error: false,
     };
   }
@@ -148,17 +144,21 @@ class Tree extends Component {
     } else
 			// there are no url parameters, render home page
       this.fetchKingdoms();
-};
+  };
 
   componentDidMount() {
     return this.paintTree(this.props.query, this.props.row);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(this.state.rows);
     if (nextProps.query !== this.props.query) {
       return this.paintTree(nextProps.query, nextProps.row);
     }
+  }
+
+  componentDidUpdate() {
+    window.scrollTo(0, document.body.scrollHeight);
+    console.log("componentDidUpdate");
   }
 
   render() {
