@@ -106,10 +106,6 @@ class Modal extends Component {
 								onClick={(e) => this.toggleSharingPopup(e)}
 							>
 								Share
-								{this.state.showSharingPopup ?
-									<Sharing className="modal__sharing" handleClose={(e) => this.toggleSharingPopup(e)}/>
-									: null
-								}
 							</div>
 
 							<div className="modal__control-btn" id="show-hierarchy">
@@ -119,6 +115,11 @@ class Modal extends Component {
 							<div className="modal__control-btn" id="add-bookmark">
 								Bookmark
 							</div>
+
+							{this.state.showSharingPopup ?
+								<Sharing className="modal__sharing" handleClose={(e) => this.toggleSharingPopup(e)}/>
+								: null
+							}
 						</div>
 
 						<Close className="modal__close" onClick={(e) => this.browseBack(e)} />
