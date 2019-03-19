@@ -5,7 +5,6 @@ import Close from "../close/close.js";
 import Sharing from "../sharing/sharing.js";
 import WikiIcon from "../../resources/images/wiki-icon.svg";
 
-
 class Modal extends Component {
 	constructor(props) {
     super(props);
@@ -108,9 +107,12 @@ class Modal extends Component {
 								Share
 							</div>
 
-							<div className="modal__control-btn" id="show-hierarchy">
+							<Link
+								to={`/?taxon=${data.parent}&row=${data.ancestors.length}`}
+								className="modal__control-btn"
+							>
 								Close modal and show hierarchy
-							</div>
+							</Link>
 
 							<div className="modal__control-btn" id="add-bookmark">
 								Bookmark
