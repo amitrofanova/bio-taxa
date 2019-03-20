@@ -21,20 +21,6 @@ function getParams(location) {
 //   return searchParams.toString();
 // }
 
-function MainPage(props) {
-
-  function updateUrl(evt) {
-    const url = evt.target.dataset.id;
-    const activeRow = parseInt(evt.target.dataset.row) + 1;
-
-    props.history.push(`?taxon=${url}&row=${activeRow}`);
-  };
-
-  return (
-    <Tree query={props.query} row={props.row} onClick={updateUrl} />
-  );
-};
-
 class App extends Component {
   render() {
     return (
@@ -47,7 +33,7 @@ class App extends Component {
               render={({ location, history }) => {
                 const { query, activeRow } = getParams(location);
 
-                return <MainPage query={query} row={activeRow} history={history} />;
+                return <Tree query={query} row={activeRow} history={history} />;
               }}
             />
 					</Switch>

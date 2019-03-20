@@ -11,6 +11,13 @@ class Tree extends Component {
     };
   }
 
+  updateUrl = (evt) => {
+    const url = evt.target.dataset.id;
+    const activeRow = parseInt(evt.target.dataset.row) + 1;
+
+    this.props.history.push(`?taxon=${url}&row=${activeRow}`);
+  };
+
   setRowsState = childrenArrays => {
     fetch("https://biotax-api.herokuapp.com/api/kingdoms")
       .then(res => res.json())
@@ -170,7 +177,7 @@ class Tree extends Component {
             rank={row.rank}
             data={row.items}
 						row={i}
-            onClick={this.props.onClick}
+            onClick={this.updateUrl}
           />
         ))}
       </React.Fragment>
