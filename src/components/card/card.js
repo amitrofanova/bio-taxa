@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./card.sass";
 
 function Card(props) {
@@ -18,13 +18,16 @@ function Card(props) {
 
 				<div className="card__description">
 					{props.description || "Taxon has no description"}
-					{props.childrenCount}
 				</div>
 			</Link>
 
 			<div className="card__controllers">
 				<a href={`${props.url}`} target="_blank" className="card__wiki-btn"></a>
 
+				{/*
+					show Hieararchy btn if taxon has descendants
+				 	"!props.row" is for the kingdoms (0th row) that don't have children_count property
+				*/}
 				{(!props.row || props.childrenCount) ? (
 					<div
 						data-id={props.id}
