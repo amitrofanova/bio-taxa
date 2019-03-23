@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Row from "../row/row.js";
-import Card from "../card/card.js";
 
 class Tree extends Component {
   constructor(props) {
@@ -61,8 +60,8 @@ class Tree extends Component {
 			);
 	}
 
-	fetchOneChildRow = query => {
-		fetch(`https://biotax-api.herokuapp.com/api/children/${query}`)
+	fetchOneChildRow = taxonParam => {
+		fetch(`https://biotax-api.herokuapp.com/api/children/${taxonParam}`)
 			.then(res => res.json())
 			.then(
 				(result) => {
@@ -71,7 +70,7 @@ class Tree extends Component {
 
 					this.setState({
 						rows: [...this.state.rows, {rank: rank, items: children}],
-						queryString: query,
+						queryString: taxonParam,
 						height: this.state.rows.length,
 						error: false,
 					});
@@ -84,15 +83,15 @@ class Tree extends Component {
 			);
 	}
 
-	fetchAllRowsByQuery = query => {
-		fetch(`https://biotax-api.herokuapp.com/api/taxon/${query}`)
+	fetchAllRowsByQuery = taxonParam => {
+		fetch(`https://biotax-api.herokuapp.com/api/taxon/${taxonParam}`)
 			.then(data => data.json())
 			.then(
 				(data) => {
 					let childrenArrays = [];
 
 					let activeItems = data.ancestors;
-					activeItems.push(parseInt(query));
+					activeItems.push(parseInt(taxonParam));
 
 					function getChildren(activeItems, childrenArrays, callback) {
 						const url = `https://biotax-api.herokuapp.com/api/children/${activeItems[0]}`;
@@ -123,49 +122,48 @@ class Tree extends Component {
 			);
 	}
 
-  paintTree = (query, row) => {
-    if (query) {
-			// url contains query
+  paintTree = (taxonParam, rowParam) => {
+    // url contains taxonParam
+    if (taxonParam) {
 			const rowsCount = this.state.rows.length;
 
+      // tree already contains rows
 			if (rowsCount) {
-				// tree already contains rows
-				if (row < rowsCount) {
-					// card on higher row has been clicked
-					// need to remove all rows lower this row and add one children row
+        // card on higher row has been clicked
+        // need to remove all rows lower this row and add one children row
+				if (rowParam < rowsCount) {
 					let newRowsArr = [...this.state.rows];
 
-					newRowsArr.splice(row);
+					newRowsArr.splice(rowParam);
 
 					this.setState({
 						rows: newRowsArr,
 					});
 
-					this.fetchOneChildRow(query);
+					this.fetchOneChildRow(taxonParam);
 				} else
 				// just add one row to the tree
-        	this.fetchOneChildRow(query);
+        	this.fetchOneChildRow(taxonParam);
       } else
-				// url contains query but tree is empty (link was shared)
-        this.fetchAllRowsByQuery(query);
+				// url contains taxonParam but tree is empty (link was shared)
+        this.fetchAllRowsByQuery(taxonParam);
     } else
 			// there are no url parameters, render home page
       this.fetchKingdoms();
   };
 
   componentDidMount() {
-    return this.paintTree(this.props.query, this.props.row);
+    return this.paintTree(this.props.taxonParam, this.props.rowParam);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.query !== this.props.query) {
-      return this.paintTree(nextProps.query, nextProps.row);
+    if (nextProps.taxonParam !== this.props.taxonParam) {
+      return this.paintTree(nextProps.taxonParam, nextProps.rowParam);
     }
   }
 
   componentDidUpdate() {
     window.scrollTo(0, document.body.scrollHeight);
-    console.log("componentDidUpdate");
   }
 
   render() {

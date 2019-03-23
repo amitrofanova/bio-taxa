@@ -9,8 +9,8 @@ function getParams(location) {
   const searchParams = new URLSearchParams(location.search);
 
   return {
-    query: searchParams.get("taxon") || "",
-    activeRow: searchParams.get("row")
+    taxonParam: searchParams.get("taxon") || "",
+    rowParam: searchParams.get("row")
   };
 }
 
@@ -31,9 +31,9 @@ class App extends Component {
             <Route
               path="/"
               render={({ location, history }) => {
-                const { query, activeRow } = getParams(location);
+                const { taxonParam, rowParam } = getParams(location);
 
-                return <Tree query={query} row={activeRow} history={history} />;
+                return <Tree taxonParam={taxonParam} rowParam={rowParam} history={history} />;
               }}
             />
 					</Switch>
