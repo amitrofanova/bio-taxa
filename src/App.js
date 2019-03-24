@@ -4,6 +4,7 @@ import {hot} from "react-hot-loader";
 import "./App.sass";
 import Tree from "./components/tree/tree.js";
 import Modal from "./components/modal/modal.js";
+import Header from "./components/header/header.js";
 
 function getParams(location) {
   const searchParams = new URLSearchParams(location.search);
@@ -24,7 +25,7 @@ function getParams(location) {
 class App extends Component {
   render() {
     return (
-      <div>
+      <div className="application">
         <Router>
           <Switch>
 						<Route path="/taxon/:id" component={Modal} />
@@ -33,7 +34,12 @@ class App extends Component {
               render={({ location, history }) => {
                 const { taxonParam, rowParam } = getParams(location);
 
-                return <Tree taxonParam={taxonParam} rowParam={rowParam} history={history} />;
+                return (
+                  <React.Fragment>
+                    <Header />
+                    <Tree taxonParam={taxonParam} rowParam={rowParam} history={history} />
+                  </React.Fragment>
+                );
               }}
             />
 					</Switch>

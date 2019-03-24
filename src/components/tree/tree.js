@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Row from "../row/row.js";
+import "./tree.sass";
 
 class Tree extends Component {
   constructor(props) {
@@ -168,7 +169,7 @@ class Tree extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div className="tree">
         {this.state.rows.map((row, i) => (
           <Row
             key={row.rank + i}
@@ -178,7 +179,7 @@ class Tree extends Component {
             onClick={this.updateUrl}
           />
         ))}
-      </React.Fragment>
+      </div>
     );
   }
 }
