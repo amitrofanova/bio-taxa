@@ -19,6 +19,13 @@ class Search extends Component {
 					.then(
 						(data) => {
 							console.log(data);
+							for (let i = 0; i < data.length; i++) {
+								var newLi = document.createElement('li');
+								newLi.innerHTML = data[i].title;
+
+								document.getElementById("search__result").appendChild(newLi);
+							}
+
 						},
 						(error) => {
 							console.log("search error");
@@ -39,6 +46,7 @@ class Search extends Component {
 					onInput={(e) => this.doSearch(e)}
 				/>
 				<div className="search__icon" />
+				<ul className="search__result" id="search__result"></ul>
 			</div>
 		);
 	}
