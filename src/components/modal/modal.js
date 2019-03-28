@@ -16,10 +16,10 @@ class Modal extends Component {
 		};
   }
 
-	browseBack(e) {
-		e.stopPropagation();
-		this.props.history.goBack();
-	}
+	// browseBack(e) {
+	// 	e.stopPropagation();
+	// 	this.props.history.goBack();
+	// }
 
 	toggleSharingPopup() {
 		this.setState({showSharingPopup: !this.state.showSharingPopup});
@@ -125,7 +125,7 @@ class Modal extends Component {
 							}
 						</div>
 
-						<Close className="modal__close" onClick={(e) => this.browseBack(e)} />
+						<Close className="modal__close" onClick={this.props.toggleModal} />
 					</div>
 				</div>
 			);
