@@ -6,10 +6,10 @@ class Search extends Component {
 	constructor(props) {
 		super(props);
 		this.timeout =  0;
-		this.handleClick = this.handleClick.bind(this);
-		this.state = {
-			openModal: false
-		}
+		// this.handleClick = this.handleClick.bind(this);
+		// this.state = {
+		// 	openModal: false
+		// }
 	}
 
 	doSearch(evt){
@@ -27,7 +27,7 @@ class Search extends Component {
 							for (let i = 0; i < data.length; i++) {
 								var newLi = document.createElement('li');
 								newLi.setAttribute("data-id", data[i].tsn);
-								newLi.onclick = this.handleClick;
+								newLi.onclick = this.props.openModal;
 								newLi.innerHTML = data[i].title;
 
 								document.getElementById("search__result").appendChild(newLi);
@@ -42,10 +42,10 @@ class Search extends Component {
 		}
   }
 
-	handleClick = (e) => {
-		let taxonId = parseInt(e.target.dataset.id);
-		this.setState({openModal: true});
-	}
+	// handleClick = (e) => {
+	// 	let taxonId = parseInt(e.target.dataset.id);
+	// 	this.setState({openModal: true});
+	// }
 
 	render() {
 		return (
@@ -59,11 +59,6 @@ class Search extends Component {
 				/>
 				<div className="search__icon" />
 				<ul className="search__result" id="search__result"></ul>
-
-				{this.state.openModal ?
-					<Modal id={"16372"} />
-					: null
-				}
 			</div>
 		);
 	}

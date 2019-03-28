@@ -5,7 +5,7 @@ import "./header.sass";
 function Header(props) {
 	return (
 		<div className="header">
-			<Search className="header__search" />
+			<Search className="header__search" openModal={props.openModal} />
 		</div>
 	);
 }

@@ -23,6 +23,24 @@ function getParams(location) {
 // }
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      openModal: false,
+      modalId: null,
+    };
+  }
+
+  openModal = (e) => {
+    let taxonId = e.target.dataset.id;
+    this.setState({
+      openModal: true,
+      modalId: taxonId,
+    });
+    console.log(taxonId);
+  }
+
   render() {
     return (
       <div className="application">
@@ -36,8 +54,9 @@ class App extends Component {
 
                 return (
                   <React.Fragment>
-                    <Header />
+                    <Header openModal={this.openModal} />
                     <Tree taxonParam={taxonParam} rowParam={rowParam} history={history} />
+                    { this.state.openModal && <Modal id={this.state.modalId} /> }
                   </React.Fragment>
                 );
               }}
