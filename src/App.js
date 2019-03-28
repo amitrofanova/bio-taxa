@@ -32,7 +32,7 @@ class App extends Component {
     };
   }
 
-  openModal = (e) => {
+  toggleModal = (e) => {
     let taxonId = e.target.dataset.id;
 
     if (this.state.openModal) {
@@ -61,9 +61,9 @@ class App extends Component {
 
                 return (
                   <React.Fragment>
-                    <Header openModal={this.openModal} />
+                    <Header toggleModal={this.toggleModal} />
                     <Tree taxonParam={taxonParam} rowParam={rowParam} history={history} />
-                    { this.state.openModal && <Modal id={this.state.modalId} toggleModal={this.openModal} /> }
+                    { this.state.openModal && <Modal id={this.state.modalId} toggleModal={this.toggleModal} /> }
                   </React.Fragment>
                 );
               }}

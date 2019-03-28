@@ -12,6 +12,20 @@ class Search extends Component {
 		// }
 	}
 
+	handleLiClick = (e) => {
+		this.props.toggleModal(e);
+
+		let ul = document.getElementById("search__result");
+
+		setTimeout(function() {
+			while (ul.firstChild) {
+				ul.removeChild(ul.firstChild);
+			}
+
+			ul.parentNode.querySelector(".search__inner").value = "";
+		}, 2000);
+	}
+
 	doSearch(evt){
     let query = evt.target.value;
 
@@ -27,7 +41,7 @@ class Search extends Component {
 							for (let i = 0; i < data.length; i++) {
 								var newLi = document.createElement('li');
 								newLi.setAttribute("data-id", data[i].tsn);
-								newLi.onclick = this.props.openModal;
+								newLi.onclick = this.handleLiClick;
 								newLi.innerHTML = data[i].title;
 
 								document.getElementById("search__result").appendChild(newLi);

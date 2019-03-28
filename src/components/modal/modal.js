@@ -49,7 +49,6 @@ class Modal extends Component {
 	render() {
 		const { error, isLoaded, data } = this.state;
 		const taxonId = this.props.id;
-		console.log(this.props);
 		const sharingLink = "";
 
 		if (!taxonId) return null;
