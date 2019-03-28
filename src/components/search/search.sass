@@ -12,6 +12,10 @@
 	border: none
 	border-radius: 3px
 
+.search__inner_active
+	border-bottom-right-radius: 0
+	border-bottom-left-radius: 0
+
 .search__icon
 	width: 12px
 	height: 12px
@@ -39,8 +43,16 @@
 	background-color: #fff
 
 .search__result li
+	border-left: 1px solid #eee
+	border-right: 1px solid #eee
+	border-bottom: 1px solid #eee
 	padding: 5px
 	list-style: none
+	&:first-child
+		border-top: 1px solid #eee
+	&:last-child
+		border-bottom-right-radius: 3px
+		border-bottom-left-radius: 3px
 	&:hover
 		background-color: #eee
 		cursor: pointer

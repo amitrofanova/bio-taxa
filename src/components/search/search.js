@@ -23,6 +23,8 @@ class Search extends Component {
 			clearSearchResult(ul);
 
 			ul.parentNode.querySelector(".search__inner").value = "";
+
+			document.querySelector(".search__inner").classList.remove("search__inner_active");
 		}, 2000);
 	}
 
@@ -37,6 +39,8 @@ class Search extends Component {
 
     this.timeout = setTimeout(() => {
 			if (query.length >= minValueLength) {
+				document.querySelector(".search__inner").classList.add("search__inner_active");
+
 				fetch(`https://biotax-api.herokuapp.com/api/search/${query}/10`)
 					.then(data => data.json())
 					.then(
@@ -57,7 +61,7 @@ class Search extends Component {
 						}
 					)
 			}
-    }, 2000);
+    }, 1500);
   }
 
 	render() {
