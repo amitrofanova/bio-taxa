@@ -33,18 +33,17 @@ class Search extends Component {
 
 		clearSearchResult(ul);
 
-		if (query.length >= minValueLength) {
-			if (this.timeout) clearTimeout(this.timeout);
+		if (this.timeout) clearTimeout(this.timeout);
 
-	    this.timeout = setTimeout(() => {
-
+    this.timeout = setTimeout(() => {
+			if (query.length >= minValueLength) {
 				fetch(`https://biotax-api.herokuapp.com/api/search/${query}/10`)
 					.then(data => data.json())
 					.then(
 						(data) => {
 							for (let i = 0; i < data.length; i++) {
 								let newLi = document.createElement('li');
-								
+
 								newLi.setAttribute("data-id", data[i].tsn);
 								newLi.onclick = this.handleLiClick;
 								newLi.innerHTML = data[i].title;
@@ -57,8 +56,8 @@ class Search extends Component {
 							console.log("search error", error);
 						}
 					)
-	    }, 1000);
-		}
+			}
+    }, 2000);
   }
 
 	render() {
