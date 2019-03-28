@@ -2,25 +2,25 @@ import React, { Component } from "react";
 import "./search.sass";
 import Modal from "../modal/modal.js";
 
+function clearSearchResult(list) {
+	while (list.firstChild) {
+		list.removeChild(list.firstChild);
+	}
+}
+
 class Search extends Component {
 	constructor(props) {
 		super(props);
 		this.timeout =  0;
-		// this.handleClick = this.handleClick.bind(this);
-		// this.state = {
-		// 	openModal: false
-		// }
 	}
 
 	handleLiClick = (e) => {
 		this.props.toggleModal(e);
 
-		let ul = document.getElementById("search__result");
-
 		setTimeout(function() {
-			while (ul.firstChild) {
-				ul.removeChild(ul.firstChild);
-			}
+			let ul = document.getElementById("search__result");
+
+			clearSearchResult(ul);
 
 			ul.parentNode.querySelector(".search__inner").value = "";
 		}, 2000);
@@ -28,23 +28,28 @@ class Search extends Component {
 
 	doSearch(evt){
     let query = evt.target.value;
+		let minValueLength = 3;
+		let ul = document.getElementById("search__result");
 
-		if (query) {
+		clearSearchResult(ul);
+
+		if (query.length >= minValueLength) {
 			if (this.timeout) clearTimeout(this.timeout);
 
 	    this.timeout = setTimeout(() => {
+
 				fetch(`https://biotax-api.herokuapp.com/api/search/${query}/10`)
 					.then(data => data.json())
 					.then(
 						(data) => {
-							console.log(data);
 							for (let i = 0; i < data.length; i++) {
-								var newLi = document.createElement('li');
+								let newLi = document.createElement('li');
+								
 								newLi.setAttribute("data-id", data[i].tsn);
 								newLi.onclick = this.handleLiClick;
 								newLi.innerHTML = data[i].title;
 
-								document.getElementById("search__result").appendChild(newLi);
+								ul.appendChild(newLi);
 							}
 
 						},
@@ -55,11 +60,6 @@ class Search extends Component {
 	    }, 1000);
 		}
   }
-
-	// handleClick = (e) => {
-	// 	let taxonId = parseInt(e.target.dataset.id);
-	// 	this.setState({openModal: true});
-	// }
 
 	render() {
 		return (
