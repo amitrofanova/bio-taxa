@@ -176,7 +176,8 @@ class Tree extends Component {
             rank={row.rank}
             data={row.items}
 						row={i}
-            onClick={this.updateUrl}
+            updateUrl={this.updateUrl}
+            toggleModal={this.props.toggleModal}
           />
         ))}
       </div>

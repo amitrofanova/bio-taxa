@@ -5,7 +5,8 @@ import "./card.sass";
 function Card(props) {
 	return (
 		<div className="card">
-			<Link to={`/taxon/${props.id}`} className="card__inner">
+			{/* <Link to={`/taxon/${props.id}`} className="card__inner"> */}
+			<div data-id={props.id} onClick={props.toggleModal} className="card__inner">
 				<div className={props.image ? "card__title" : "card__title_no-img"}>
 					{props.title || props.name}
 				</div>
@@ -16,10 +17,10 @@ function Card(props) {
 					</div>
 				}
 
-				<div className="card__description">
+				<div data-id={props.id} onClick={props.toggleModal} className="card__description">
 					{props.description || "Taxon has no description"}
 				</div>
-			</Link>
+			</div>
 
 			<div className="card__controllers">
 				<a href={`${props.url}`} target="_blank" className="card__wiki-btn"></a>
@@ -33,7 +34,7 @@ function Card(props) {
 						data-id={props.id}
 						data-row={props.row}
 						className="card__hierarchy-btn"
-						onClick={(evt) => props.onClick(evt)}
+						onClick={(evt) => props.updateUrl(evt)}
 					>
 					</div>
 				) : (

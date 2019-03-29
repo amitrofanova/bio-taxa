@@ -62,7 +62,7 @@ class App extends Component {
                 return (
                   <React.Fragment>
                     <Header toggleModal={this.toggleModal} />
-                    <Tree taxonParam={taxonParam} rowParam={rowParam} history={history} />
+                    <Tree taxonParam={taxonParam} rowParam={rowParam} history={history} toggleModal={this.toggleModal} />
                     { this.state.openModal && <Modal id={this.state.modalId} toggleModal={this.toggleModal} /> }
                   </React.Fragment>
                 );

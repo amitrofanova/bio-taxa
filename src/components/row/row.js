@@ -20,7 +20,8 @@ function Row(props) {
 						url={i.url}
 						childrenCount={i.total_children}
 						row={props.row}
-						onClick={props.onClick}
+						updateUrl={props.updateUrl}
+						toggleModal={props.toggleModal}
 					/>
 				))}
 			</div>
