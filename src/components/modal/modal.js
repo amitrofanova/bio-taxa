@@ -26,7 +26,7 @@ class Modal extends Component {
 	}
 
 	componentDidMount() {
-		const idParam = this.props.id;
+		const idParam = this.props.id || this.props.match.params.id;
 
 		fetch(`https://biotax-api.herokuapp.com/api/taxon/${idParam}`)
 			.then(res => res.json())
@@ -48,7 +48,7 @@ class Modal extends Component {
 
 	render() {
 		const { error, isLoaded, data } = this.state;
-		const taxonId = this.props.id;
+		const taxonId = this.props.id || this.props.match.params.id;
 		const sharingLink = "";
 
 		if (!taxonId) return null;
@@ -119,7 +119,7 @@ class Modal extends Component {
 							</div>
 
 							{this.state.showSharingPopup ?
-								<Sharing className="modal__sharing" handleClose={(e) => this.toggleSharingPopup(e)}/>
+								<Sharing url={`taxon/${data.id}`} className="modal__sharing" handleClose={(e) => this.toggleSharingPopup(e)} />
 								: null
 							}
 						</div>

@@ -21,6 +21,20 @@ function selectText(nodeId) {
 }
 
 class Sharing extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  getSharingLink = () => {
+    let url = [location.protocol, '//', location.host, location.pathname].join('');
+    
+    if (!url.includes(this.props.url)) {
+      url = url.concat(this.props.url);
+    }
+
+    return url;
+  }
+
 	componentDidMount() {
 		selectText("sharing-link");
 	}
@@ -29,7 +43,7 @@ class Sharing extends Component {
 		return(
 			<div className={`sharing ${this.props.className}`} onClick={(e) => e.stopPropagation()} >
 				<div className="sharing__title">Copy link below:</div>
-				<div className="sharing__url" id="sharing-link">{window.location.href}</div>
+				<div className="sharing__url" id="sharing-link">{this.getSharingLink()}</div>
 				<Close className="sharing__close" onClick={this.props.handleClose}/>
 			</div>
 		)
