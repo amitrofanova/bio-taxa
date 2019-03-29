@@ -8,6 +8,10 @@ function clearSearchResult(list) {
 	}
 }
 
+function toggleInputStyle() {
+	document.querySelector(".search__input").classList.toggle("search__input_active");
+}
+
 class Search extends Component {
 	constructor(props) {
 		super(props);
@@ -22,10 +26,10 @@ class Search extends Component {
 
 			clearSearchResult(ul);
 
-			ul.parentNode.querySelector(".search__inner").value = "";
+			ul.parentNode.querySelector(".search__input").value = "";
 
-			document.querySelector(".search__inner").classList.remove("search__inner_active");
-		}, 2000);
+			toggleInputStyle();
+		}, 1500);
 	}
 
 	doSearch(evt){
@@ -39,7 +43,7 @@ class Search extends Component {
 
     this.timeout = setTimeout(() => {
 			if (query.length >= minValueLength) {
-				document.querySelector(".search__inner").classList.add("search__inner_active");
+				toggleInputStyle();
 
 				fetch(`https://biotax-api.herokuapp.com/api/search/${query}/10`)
 					.then(data => data.json())
@@ -70,7 +74,7 @@ class Search extends Component {
 				<input
 					type="search"
 					name="search"
-					className="search__inner"
+					className="search__input"
 					placeholder="Search for taxon..."
 					onInput={(e) => this.doSearch(e)}
 				/>
