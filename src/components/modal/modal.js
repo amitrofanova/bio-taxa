@@ -29,12 +29,13 @@ class Modal extends Component {
 		const idParam = this.props.id || this.props.match.params.id;
 
 		fetch(`https://biotax-api.herokuapp.com/api/taxon/${idParam}`)
-			.then(res => res.json())
+			.then(data => data.json())
 			.then(
-				(result) => {
+				(data) => {
+					console.log(data);
 					this.setState({
 						isLoaded: true,
-						data: result
+						data: data
 					});
 				},
 				(error) => {
@@ -53,13 +54,15 @@ class Modal extends Component {
 
 		if (!taxonId) return null;
 
-		if (error) {
+		if (error || !data) {
 			return (
 				<div className="modal">
 					<div className="modal__bg"></div>
 
 					<div className="modal__inner">
-						<div style={ { margin: 10 } }>Error: {error.message}</div>;
+						<div style={ { margin: 10 } }>Error: {error ? error.message : "Taxon data was not found"}</div>
+
+						<Close className="modal__close" onClick={this.props.toggleModal} />
 					</div>
 				</div>
 			);
