@@ -20,7 +20,7 @@ class Tree extends Component {
 
   setRowsState = childrenArrays => {
     fetch("https://biotax-api.herokuapp.com/api/kingdoms")
-      .then(res => res.json())
+      .then(data => data.json())
       .then(
         (result) => {
           this.setState({
@@ -46,11 +46,11 @@ class Tree extends Component {
 
 	fetchKingdoms = () =>  {
 		fetch("https://biotax-api.herokuapp.com/api/kingdoms")
-			.then(res => res.json())
+			.then(data => data.json())
 			.then(
-				(result) => {
+				(data) => {
 					this.setState({
-						rows: [{rank: "Kingdom", items: result}],
+						rows: [{rank: "Kingdom", items: data}],
 					});
 				},
 				(error) => {
@@ -63,7 +63,7 @@ class Tree extends Component {
 
 	fetchOneChildRow = taxonParam => {
 		fetch(`https://biotax-api.herokuapp.com/api/children/${taxonParam}`)
-			.then(res => res.json())
+			.then(data => data.json())
 			.then(
 				(result) => {
 					let rank = result.children[0].rank;
@@ -71,8 +71,6 @@ class Tree extends Component {
 
 					this.setState({
 						rows: [...this.state.rows, {rank: rank, items: children}],
-						queryString: taxonParam,
-						height: this.state.rows.length,
 						error: false,
 					});
 				},
