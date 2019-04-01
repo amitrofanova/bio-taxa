@@ -110,12 +110,12 @@ class Modal extends Component {
 								Share
 							</div>
 
-							<Link
+							{/* <Link
 								to={`/?taxon=${data.parent}&row=${data.ancestors.length}`}
 								className="modal__control-btn"
 							>
 								Close modal and show hierarchy
-							</Link>
+							</Link> */}
 
 							<div className="modal__control-btn" id="add-bookmark">
 								Bookmark
