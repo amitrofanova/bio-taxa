@@ -12,18 +12,15 @@ class Card extends Component {
 		this.props.updateUrl(evt);
 
 		let clickedCard = evt.target.closest(".card");
-		let siblings = n => [...n.parentElement.children].filter(c=>c!=n);
+		let siblings = [...clickedCard.parentElement.children].filter(c=>c!=clickedCard);
 
-		console.log(siblings(clickedCard));
-
-		let siblingsArr = siblings(clickedCard);
-
-		clickedCard.classList.remove("card__inactive");
-		for (let i = 0; i < siblingsArr.length; i++) {
-			siblingsArr[i].classList.add("card__inactive");
+		if (clickedCard.classList.contains("card__inactive")) {
+			clickedCard.classList.remove("card__inactive");
 		}
-		console.log(evt.target.closest(".card"));
-		// console.log(document.querySelector("card__hierarchy-btn"));
+
+		for (let i = 0; i < siblings.length; i++) {
+			siblings[i].classList.add("card__inactive");
+		}
 	}
 
 	render() {
