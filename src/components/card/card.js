@@ -2,47 +2,72 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./card.sass";
 
-function Card(props) {
-	return (
-		<div className="card">
-			{/* <Link to={`/taxon/${props.id}`} className="card__inner"> */}
-			<div data-id={props.id} onClick={props.toggleModal} className="card__inner">
-				<div className={props.image ? "card__title" : "card__title_no-img"}>
-					{props.title || props.name}
+class Card extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+
+	handleHierarchyClick = (evt) => {
+		this.props.updateUrl(evt);
+
+		let clickedCard = evt.target.closest(".card");
+		let siblings = n => [...n.parentElement.children].filter(c=>c!=n);
+
+		console.log(siblings(clickedCard));
+
+		let siblingsArr = siblings(clickedCard);
+
+		clickedCard.classList.remove("card__inactive");
+		for (let i = 0; i < siblingsArr.length; i++) {
+			siblingsArr[i].classList.add("card__inactive");
+		}
+		console.log(evt.target.closest(".card"));
+		// console.log(document.querySelector("card__hierarchy-btn"));
+	}
+
+	render() {
+		return (
+			<div className="card">
+				{/* <Link to={`/taxon/${this.props.id}`} className="card__inner"> */}
+				<div data-id={this.props.id} onClick={this.props.toggleModal} className="card__inner">
+					<div className={this.props.image ? "card__title" : "card__title_no-img"}>
+						{this.props.title || this.props.name}
+					</div>
+
+					{this.props.image &&
+						<div className="card__img">
+							<img src={`${this.props.image}`} alt={`${this.props.name}`} />
+						</div>
+					}
+
+					<div data-id={this.props.id} onClick={this.props.toggleModal} className="card__description">
+						{this.props.description || "Taxon has no description"}
+					</div>
 				</div>
 
-				{props.image &&
-					<div className="card__img">
-						<img src={`${props.image}`} alt={`${props.name}`} />
-					</div>
-				}
+				<div className="card__controllers">
+					<a href={`${this.props.url}`} target="_blank" className="card__wiki-btn"></a>
 
-				<div data-id={props.id} onClick={props.toggleModal} className="card__description">
-					{props.description || "Taxon has no description"}
+					{/*
+						show Hieararchy btn if taxon has descendants
+					 	"!this.props.row" is for the kingdoms (0th row) that don't have children_count property
+					*/}
+					{(!this.props.row || this.props.childrenCount) ? (
+						<div
+							data-id={this.props.id}
+							data-row={this.props.row}
+							className="card__hierarchy-btn"
+							onClick={this.handleHierarchyClick}
+						>
+						</div>
+					) : (
+						<div>Leaf</div>
+					)}
 				</div>
 			</div>
-
-			<div className="card__controllers">
-				<a href={`${props.url}`} target="_blank" className="card__wiki-btn"></a>
-
-				{/*
-					show Hieararchy btn if taxon has descendants
-				 	"!props.row" is for the kingdoms (0th row) that don't have children_count property
-				*/}
-				{(!props.row || props.childrenCount) ? (
-					<div
-						data-id={props.id}
-						data-row={props.row}
-						className="card__hierarchy-btn"
-						onClick={(evt) => props.updateUrl(evt)}
-					>
-					</div>
-				) : (
-					<div>Leaf</div>
-				)}
-			</div>
-		</div>
-	);
+		);
+	}
 }
 
 export default Card;
