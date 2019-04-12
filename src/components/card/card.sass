@@ -6,8 +6,21 @@ $border-color: darkslategray
 	max-width: 350px
 	flex-basis: 19%
 	flex-direction: column
-	padding: 0 10px
+	justify-content: space-between
+	margin: 0 10px
 	z-index: 1
+	border: 2px solid $border-color
+	// border-bottom: none
+	text-align: center
+	text-decoration: none
+	cursor: pointer
+	&:hover
+		.card__title, .card__img
+			visibility: hidden
+		.card__description
+			visibility: visible
+		background-color: lighten($border-color, 80%)
+
 
 .card__inner
 	position: relative
@@ -39,7 +52,7 @@ $border-color: darkslategray
 
 .card__title_no-img
 	@extend .card__title
-	height: 100%
+	flex: 1 0 auto
 	display: flex
 	justify-content: center
 	align-items: center
@@ -47,19 +60,19 @@ $border-color: darkslategray
 .card__controllers
 	display: flex
 	z-index: 2
-	& > div, & > a
+	.card__wiki-btn, .card__hierarchy-btn
 		flex-basis: 50%
 		height: 26px
 		display: flex
 		justify-content: center
 		align-items: center
-		border: 2px solid $border-color
+		border-top: 2px solid $border-color
 		background-color: lighten(#dfdfdf, 10%)
 		&:hover
 			background-color: #dfdfdf
 			cursor: pointer
 	.card__wiki-btn
-		border-right: none
+		border-right: 2px solid $border-color
 
 .card__img
 	width: 100%

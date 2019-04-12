@@ -27,7 +27,7 @@ class Card extends Component {
 		return (
 			<div className="card">
 				{/* <Link to={`/taxon/${this.props.id}`} className="card__inner"> */}
-				<div data-id={this.props.id} onClick={this.props.toggleModal} className="card__inner">
+				{/* <div data-id={this.props.id} onClick={this.props.toggleModal} className="card__inner"> */}
 					<div className={this.props.image ? "card__title" : "card__title_no-img"}>
 						{this.props.title || this.props.name}
 					</div>
@@ -41,7 +41,7 @@ class Card extends Component {
 					<div data-id={this.props.id} onClick={this.props.toggleModal} className="card__description">
 						{this.props.description || "Taxon has no description"}
 					</div>
-				</div>
+
 
 				<div className="card__controllers">
 					<a href={`${this.props.url}`} target="_blank" className="card__wiki-btn"></a>
