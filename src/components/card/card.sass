@@ -10,10 +10,8 @@ $border-color: darkslategray
 	margin: 0 10px
 	z-index: 1
 	border: 2px solid $border-color
-	// border-bottom: none
 	text-align: center
 	text-decoration: none
-	cursor: pointer
 	&:hover
 		.card__title, .card__img
 			visibility: hidden
@@ -49,6 +47,7 @@ $border-color: darkslategray
 	font-weight: 700
 	color: #000
 	z-index: 1
+	cursor: pointer
 
 .card__title_no-img
 	@extend .card__title
@@ -60,53 +59,54 @@ $border-color: darkslategray
 .card__controllers
 	display: flex
 	z-index: 2
-	.card__wiki-btn, .card__hierarchy-btn
-		flex-basis: 50%
-		height: 26px
-		display: flex
-		justify-content: center
-		align-items: center
-		border-top: 2px solid $border-color
-		background-color: lighten(#dfdfdf, 10%)
-		&:hover
-			background-color: #dfdfdf
-			cursor: pointer
-	.card__wiki-btn
-		border-right: 2px solid $border-color
 
-.card__img
-	width: 100%
-	height: 140px
-	overflow: hidden
-	img
-		display: block
-		width: 100%
+.card__wiki-btn, .card__hierarchy-btn, .card__leaf
+	flex-basis: 50%
+	height: 26px
+	border-top: 2px solid $border-color
+	display: flex
+	justify-content: center
+	align-items: center
+	background-color: lighten(#dfdfdf, 10%)
 
-.card__description
-	position: absolute
-	top: 0
-	left: 0
-	max-height: 95%
-	overflow: hidden
-	padding: 7px 7px 0
-	font-size: 14px
-	visibility: hidden
-
-.card__details-link
-	color: #000
-	text-decoration: none
+.card__wiki-btn, .card__hierarchy-btn
+	background-size: 15px
+	background-repeat: no-repeat
+	background-position: 50% 40%
+	&:hover
+		background-color: #dfdfdf
+		cursor: pointer
 
 .card__hierarchy-btn
 	background-image: url("../../resources/images/hierarchy-icon.png")
 
 .card__wiki-btn
+	border-right: 2px solid $border-color
 	background-image: url("../../resources/images/wiki-icon.svg")
 
-.card__hierarchy-btn, .card__wiki-btn
-	height: 20px
-	background-size: 15px
-	background-repeat: no-repeat
-	background-position: 50% 40%
+.card__img
+	width: 100%
+	height: 140px
+	overflow: hidden
+	cursor: pointer
+	img
+		display: block
+		width: 100%
+
+.card__description
+	visibility: hidden
+	position: absolute
+	top: 0
+	left: 0
+	height: 95%
+	overflow: hidden
+	padding: 7px 7px 0
+	font-size: 14px
+	cursor: pointer
+
+.card__details-link
+	color: #000
+	text-decoration: none
 
 .card_moved-aside
 	transform: scale(.9)
