@@ -12,12 +12,15 @@ class Card extends Component {
 		this.props.updateUrl(evt);
 
 		let clickedCard = evt.target.closest(".card");
-		let siblings = [...clickedCard.parentElement.children].filter(c=>c!=clickedCard);
+
+		this.props.transformNotChoisenSiblings(clickedCard);
 
 		if (clickedCard.classList.contains("card__inactive")) {
 			clickedCard.classList.remove("card__inactive");
 		}
 
+		let siblings = [...clickedCard.parentElement.children].filter(c=>c!=clickedCard);
+		
 		for (let i = 0; i < siblings.length; i++) {
 			siblings[i].classList.add("card__inactive");
 		}

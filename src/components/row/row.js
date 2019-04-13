@@ -22,6 +22,7 @@ function Row(props) {
 						row={props.row}
 						updateUrl={props.updateUrl}
 						toggleModal={props.toggleModal}
+						transformNotChoisenSiblings={props.transformNotChoisenSiblings}
 					/>
 				))}
 			</div>

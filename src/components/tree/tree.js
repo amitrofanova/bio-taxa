@@ -11,12 +11,44 @@ class Tree extends Component {
     };
   }
 
+  // TODO: check parentheses
   updateUrl = (evt) => {
     const url = evt.target.dataset.id;
     const activeRow = parseInt(evt.target.dataset.row) + 1;
 
     this.props.history.push(`?taxon=${url}&row=${activeRow}`);
   };
+
+  transformNotChoisenSiblings = ($selectedCard) => {
+    let $cardsInRow = $selectedCard.parentElement.children;
+    let $siblings = [...$cardsInRow].filter(c=>c!=$selectedCard);
+    let cardsInRowCount = $cardsInRow.length;
+    let selectedCardNum = Array.prototype.indexOf.call($cardsInRow, $selectedCard);
+    const middleCardNum = Math.floor(cardsInRowCount / 2);
+
+    for (let i = 0; i < $siblings.length; i++) {
+      $siblings[i].classList.add("card__inactive");
+    }
+
+    if ((cardsInRowCount % 2) === 0) {
+      let emptyCard = document.createElement("div");
+      emptyCard.classList.add("card");
+      emptyCard.style.visibility = "hidden";
+
+      $selectedCard.parentElement.appendChild(emptyCard);
+      cardsInRowCount += 1;
+
+      for (let i = 0; i < cardsInRowCount; i++) {
+        if (i === selectedCardNum) {
+          $cardsInRow[i].style.order = middleCardNum;
+        } else if (i === middleCardNum) {
+          $cardsInRow[i].style.order = selectedCardNum;
+        } else {
+          $cardsInRow[i].style.order = i;
+        }
+      }
+    }
+  }
 
   setRowsState = childrenArrays => {
     fetch("https://biotax-api.herokuapp.com/api/kingdoms")
@@ -91,9 +123,11 @@ class Tree extends Component {
 
 					let activeItems = data.ancestors;
 					activeItems.push(parseInt(taxonParam));
+          console.log(activeItems);
 
 					function getChildren(activeItems, childrenArrays, callback) {
 						const url = `https://biotax-api.herokuapp.com/api/children/${activeItems[0]}`;
+            // document.querySelectorAll(`.card__inner[data-id="${activeItems[0]}"]`);
 
 						fetch(url)
 							.then(data => data.json())
@@ -176,6 +210,7 @@ class Tree extends Component {
 						row={i}
             updateUrl={this.updateUrl}
             toggleModal={this.props.toggleModal}
+            transformNotChoisenSiblings={this.transformNotChoisenSiblings}
           />
         ))}
       </div>
