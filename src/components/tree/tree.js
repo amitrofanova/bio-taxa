@@ -11,15 +11,14 @@ class Tree extends Component {
     };
   }
 
-  // TODO: check parentheses
-  updateUrl = (evt) => {
+  updateUrl = evt => {
     const url = evt.target.dataset.id;
     const activeRow = parseInt(evt.target.dataset.row) + 1;
 
     this.props.history.push(`?taxon=${url}&row=${activeRow}`);
   };
 
-  transformNotChoisenSiblings = ($selectedCard) => {
+  transformNotChoisenSiblings = $selectedCard => {
     let $cardsInRow = $selectedCard.parentElement.children;
     let $siblings = [...$cardsInRow].filter(c=>c!=$selectedCard);
     let cardsInRowCount = $cardsInRow.length;
