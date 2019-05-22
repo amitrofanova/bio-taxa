@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import {hot} from "react-hot-loader";
 import "./App.sass";
-import Tree from "./components/tree/tree.js";
-import Modal from "./components/modal/modal.js";
-import Header from "./components/header/header.js";
+import Tree from "./components/tree/tree";
+import Modal from "./components/modal/modal";
+import Header from "./components/header/header";
 
 function getParams(location) {
   const searchParams = new URLSearchParams(location.search);
@@ -32,7 +32,7 @@ class App extends Component {
     };
   }
 
-  toggleModal = (e) => {
+  toggleModal = e => {
     let taxonId = e.target.dataset.id;
 
     if (this.state.openModal) {
