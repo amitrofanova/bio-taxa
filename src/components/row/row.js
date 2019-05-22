@@ -4,27 +4,31 @@ import Card from "../card/card.js";
 import "./row.sass";
 
 function Row(props) {
+	const cardComponents = props.data.map(card => {
+		return (
+			<Card
+				key={card.id}
+				id={card.id}
+				name={card.name}
+				image={card.image_url}
+				title={card.title}
+				description={card.description}
+				url={card.url}
+				childrenCount={card.total_children}
+				row={props.row}
+				updateUrl={props.updateUrl}
+				toggleModal={props.toggleModal}
+				transformNotChoisenSiblings={props.transformNotChoisenSiblings}
+			/>
+		)
+	});
+
 	return (
 		<div className="row">
 			<div className="row__rank">{props.rank}</div>
 
 			<div className="row__cards" data-rank={props.rank}>
-				{props.data.map(i => (
-					<Card
-						key={i.id}
-						id={i.id}
-						name={i.name}
-						image={i.image_url}
-						title={i.title}
-						description={i.description}
-						url={i.url}
-						childrenCount={i.total_children}
-						row={props.row}
-						updateUrl={props.updateUrl}
-						toggleModal={props.toggleModal}
-						transformNotChoisenSiblings={props.transformNotChoisenSiblings}
-					/>
-				))}
+				{cardComponents}
 			</div>
 		</div>
 	)
