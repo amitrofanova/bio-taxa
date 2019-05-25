@@ -2,14 +2,11 @@ import React, { Component } from "react";
 import "./search.sass";
 import Modal from "../modal/modal.js";
 
+// TODO: move to class?
 function clearSearchResult(list) {
 	while (list.firstChild) {
 		list.removeChild(list.firstChild);
 	}
-}
-
-function toggleInputStyle() {
-	document.querySelector(".search__input").classList.toggle("search__input_active");
 }
 
 class Search extends Component {
@@ -18,24 +15,29 @@ class Search extends Component {
 		this.timeout =  0;
 	}
 
+	toggleInputStyle() {
+		document.querySelector(".search__input").classList.toggle("search__input_active");
+	}
+
 	handleLiClick = (e) => {
 		this.props.toggleModal(e);
 
-		setTimeout(function() {
+		setTimeout(() => {
 			let ul = document.getElementById("search__result");
 
 			clearSearchResult(ul);
 
 			ul.parentNode.querySelector(".search__input").value = "";
 
-			toggleInputStyle();
+			this.toggleInputStyle();
 		}, 1500);
 	}
 
-	doSearch(evt){
-    let query = evt.target.value;
+	doSearch = (evt) => {
 		let minValueLength = 3;
+    let query = evt.target.value;
 		let ul = document.getElementById("search__result");
+		let maxResultsNum = 12;
 
 		clearSearchResult(ul);
 
@@ -43,9 +45,9 @@ class Search extends Component {
 
     this.timeout = setTimeout(() => {
 			if (query.length >= minValueLength) {
-				toggleInputStyle();
+				this.toggleInputStyle();
 
-				fetch(`https://biotax-api.herokuapp.com/api/search/${query}/10`)
+				fetch(`https://biotax-api.herokuapp.com/api/search/${query}/${maxResultsNum}`)
 					.then(data => data.json())
 					.then(
 						(data) => {
@@ -76,7 +78,7 @@ class Search extends Component {
 					name="search"
 					className="search__input"
 					placeholder="Search for taxon..."
-					onInput={(e) => this.doSearch(e)}
+					onInput={this.doSearch}
 				/>
 				<div className="search__icon" />
 				<ul className="search__result" id="search__result"></ul>
