@@ -4,7 +4,10 @@ import "./tree.sass";
 
 class Tree extends Component {
   constructor(props) {
+    //Выполнить вызов конструктора родительского класса
+    //В конструкторе родительского класса могут выполняться некие операции по инициализации, результаты выполнения которых пригодятся и нашему объекту.
     super(props);
+
     this.state = {
       rows: [],
       error: false,
@@ -51,9 +54,9 @@ class Tree extends Component {
 
   setRowsState = childrenArrays => {
     fetch("https://biotax-api.herokuapp.com/api/kingdoms")
-      .then(data => data.json())
+      .then(response => response.json())
       .then(
-        (result) => {
+        data => {
           this.setState({
             rows: [{rank: "Kingdom", items: result}],
           });
@@ -67,7 +70,7 @@ class Tree extends Component {
             });
           }
         },
-        (error) => {
+        error => {
           this.setState({
             error
           });
@@ -77,14 +80,14 @@ class Tree extends Component {
 
 	fetchKingdoms = () =>  {
 		fetch("https://biotax-api.herokuapp.com/api/kingdoms")
-			.then(data => data.json())
+			.then(response => response.json())
 			.then(
-				(data) => {
+				data => {
 					this.setState({
 						rows: [{rank: "Kingdom", items: data}],
 					});
 				},
-				(error) => {
+				error => {
 					this.setState({
 						error
 					});
@@ -94,18 +97,18 @@ class Tree extends Component {
 
 	fetchOneChildRow = taxonParam => {
 		fetch(`https://biotax-api.herokuapp.com/api/children/${taxonParam}`)
-			.then(data => data.json())
+			.then(response => response.json())
 			.then(
-				(result) => {
-					let rank = result.children[0].rank;
-					let children = result.children;
+				data => {
+					let rank = data.children[0].rank;
+					let children = data.children;
 
 					this.setState({
 						rows: [...this.state.rows, {rank: rank, items: children}],
 						error: false,
 					});
 				},
-				(error) => {
+				error => {
 					this.setState({
 						error
 					});
@@ -115,9 +118,9 @@ class Tree extends Component {
 
 	fetchAllRowsByQuery = taxonParam => {
 		fetch(`https://biotax-api.herokuapp.com/api/taxon/${taxonParam}`)
-			.then(data => data.json())
+			.then(response => response.json())
 			.then(
-				(data) => {
+				data => {
 					let childrenArrays = [];
 
 					let activeItems = data.ancestors;
@@ -146,7 +149,7 @@ class Tree extends Component {
 
 					getChildren(activeItems, childrenArrays, this.setRowsState);
 				},
-				(error) => {
+				error => {
 					this.setState({
 						error
 					});
