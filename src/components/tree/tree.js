@@ -14,10 +14,6 @@ class Tree extends Component {
     };
   }
 
-  updateUrl = (id, row) => {
-    this.props.history.push(`?taxon=${id}&row=${row}`);
-  };
-
   styleCards = $selectedCard => {
     let $cardsInRow = $selectedCard.parentElement.children;
     let $siblings = [...$cardsInRow].filter(c=>c!=$selectedCard);
@@ -54,32 +50,6 @@ class Tree extends Component {
       $siblings[i].classList.add("card__inactive");
     }
 
-  }
-
-  setRowsState = childrenArrays => {
-    fetch("https://biotax-api.herokuapp.com/api/kingdoms")
-      .then(response => response.json())
-      .then(
-        data => {
-          this.setState({
-            rows: [{rank: "Kingdom", items: data}],
-          });
-
-          for (let i = 0; i < childrenArrays.length; i++) {
-            let childrenArray = childrenArrays[i];
-            let rank = childrenArray[0].rank;
-
-            this.setState({
-              rows: [...this.state.rows, {rank: rank, items: childrenArray}],
-            });
-          }
-        },
-        error => {
-          this.setState({
-            error
-          });
-        }
-      );
   }
 
 	fetchKingdoms = () =>  {
@@ -145,46 +115,72 @@ class Tree extends Component {
 			);
 	}
 
-	fetchAllRowsByQuery = taxonParam => {
-		fetch(`https://biotax-api.herokuapp.com/api/taxon/${taxonParam}`)
-			.then(response => response.json())
-			.then(
-				data => {
-					let childrenArrays = [];
+  // setRowsState = childrenArrays => {
+  //   fetch("https://biotax-api.herokuapp.com/api/kingdoms")
+  //     .then(response => response.json())
+  //     .then(
+  //       data => {
+  //         this.setState({
+  //           rows: [{rank: "Kingdom", items: data}],
+  //         });
+  //
+  //         for (let i = 0; i < childrenArrays.length; i++) {
+  //           let childrenArray = childrenArrays[i];
+  //           let rank = childrenArray[0].rank;
+  //
+  //           this.setState({
+  //             rows: [...this.state.rows, {rank: rank, items: childrenArray}],
+  //           });
+  //         }
+  //       },
+  //       error => {
+  //         this.setState({
+  //           error
+  //         });
+  //       }
+  //     );
+  // }
 
-					let activeItems = data.ancestors;
-					activeItems.push(parseInt(taxonParam));
-          console.log(activeItems);
-
-					function getChildren(activeItems, childrenArrays, callback) {
-						const url = `https://biotax-api.herokuapp.com/api/children/${activeItems[0]}`;
-            // document.querySelectorAll(`.card__inner[data-id="${activeItems[0]}"]`);
-
-						fetch(url)
-							.then(data => data.json())
-							.then(
-								(data) => {
-									childrenArrays.push(data.children);
-									activeItems.shift();
-
-									if (activeItems.length) {
-										getChildren(activeItems, childrenArrays, callback);
-									} else {
-										callback(childrenArrays);
-									}
-								}
-							);
-					}
-
-					getChildren(activeItems, childrenArrays, this.setRowsState);
-				},
-				error => {
-					this.setState({
-						error
-					});
-				}
-			);
-	}
+	// fetchAllRowsByQuery = taxonParam => {
+	// 	fetch(`https://biotax-api.herokuapp.com/api/taxon/${taxonParam}`)
+	// 		.then(response => response.json())
+	// 		.then(
+	// 			data => {
+	// 				let childrenArrays = [];
+  //
+	// 				let activeItems = data.ancestors;
+	// 				activeItems.push(parseInt(taxonParam));
+  //         console.log(activeItems);
+  //
+	// 				function getChildren(activeItems, childrenArrays, callback) {
+	// 					const url = `https://biotax-api.herokuapp.com/api/children/${activeItems[0]}`;
+  //           // document.querySelectorAll(`.card__inner[data-id="${activeItems[0]}"]`);
+  //
+	// 					fetch(url)
+	// 						.then(data => data.json())
+	// 						.then(
+	// 							(data) => {
+	// 								childrenArrays.push(data.children);
+	// 								activeItems.shift();
+  //
+	// 								if (activeItems.length) {
+	// 									getChildren(activeItems, childrenArrays, callback);
+	// 								} else {
+	// 									callback(childrenArrays);
+	// 								}
+	// 							}
+	// 						);
+	// 				}
+  //
+	// 				getChildren(activeItems, childrenArrays, this.setRowsState);
+	// 			},
+	// 			error => {
+	// 				this.setState({
+	// 					error
+	// 				});
+	// 			}
+	// 		);
+	// }
 
   // paintTree = (taxonParam, rowParam) => {
   //   // url contains taxonParam
@@ -216,6 +212,10 @@ class Tree extends Component {
   //     this.fetchKingdoms();
   // };
 
+  // updateUrl = (id, row) => {
+  //   this.props.history.push(`?taxon=${id}&row=${row}`);
+  // };
+
   repaintTree = (taxonId, rowId) => {
     const rowsCount = this.state.rows.length;
 
@@ -236,8 +236,7 @@ class Tree extends Component {
   }
 
   componentDidUpdate() {
-    // window.scrollTo(0, document.body.scrollHeight);
-    console.log("update");
+    window.scrollTo(0, document.body.scrollHeight);
   }
 
   render() {
@@ -249,7 +248,6 @@ class Tree extends Component {
             rank={row.rank}
             data={row.items}
 						row={i}
-            // updateUrl={this.updateUrl}
             repaintTree={this.repaintTree}
             toggleModal={this.props.toggleModal}
             styleCards={this.styleCards}
