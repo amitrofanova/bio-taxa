@@ -184,15 +184,40 @@ class Tree extends Component {
       this.fetchKingdoms();
   };
 
-  componentDidMount() {
-    return this.paintTree(this.props.taxonParam, this.props.rowParam);
+  repaintTree = (taxonId, rowId) => {
+    const rowsCount = this.state.rows.length;
+
+    // tree already contains rows
+    if (rowsCount) {
+      // card on higher row has been clicked
+      // need to remove all rows lower this row and add one children row
+      if (rowId < rowsCount) {
+        let newRowsArr = [...this.state.rows];
+
+        newRowsArr.splice(rowId);
+
+        this.setState({
+          rows: newRowsArr,
+        });
+
+        this.fetchOneChildRow(taxonId);
+      } else
+      // just add one row to the tree
+        this.fetchOneChildRow(taxonId);
+    }
+    // TODO: implement link sharing
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.taxonParam !== this.props.taxonParam) {
-      return this.paintTree(nextProps.taxonParam, nextProps.rowParam);
-    }
+  componentDidMount() {
+    // return this.paintTree(this.props.taxonParam, this.props.rowParam);
+    this.fetchKingdoms();
   }
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.taxonParam !== this.props.taxonParam) {
+  //     return this.paintTree(nextProps.taxonParam, nextProps.rowParam);
+  //   }
+  // }
 
   componentDidUpdate() {
     window.scrollTo(0, document.body.scrollHeight);
@@ -207,7 +232,8 @@ class Tree extends Component {
             rank={row.rank}
             data={row.items}
 						row={i}
-            updateUrl={this.updateUrl}
+            // updateUrl={this.updateUrl}
+            repaintTree={this.repaintTree}
             toggleModal={this.props.toggleModal}
             transformNotChoisenSiblings={this.transformNotChoisenSiblings}
           />

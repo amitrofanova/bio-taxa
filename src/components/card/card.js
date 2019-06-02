@@ -11,11 +11,12 @@ class Card extends Component {
 	handleHierarchyClick = evt => {
 		const target = evt.target;
 
-    const id = target.dataset.id;
-    const row = parseInt(target.dataset.row) + 1;
+    const taxonId = target.dataset.id;
+    const rowId = parseInt(target.dataset.row) + 1;
 		const $clickedCard = target.closest(".card");
 
-		this.props.updateUrl(id, row);
+		// this.props.updateUrl(id, row);
+		this.props.repaintTree(taxonId, rowId);
 		this.props.transformNotChoisenSiblings($clickedCard);
 
 		if ($clickedCard.classList.contains("card__inactive")) {
