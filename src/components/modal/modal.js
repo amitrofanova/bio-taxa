@@ -21,7 +21,25 @@ class Modal extends Component {
 	// 	this.props.history.goBack();
 	// }
 
-	toggleSharingPopup() {
+	getAncestors = (id, ancestors, callback) => {
+		fetch(`https://biotax-api.herokuapp.com/api/taxon/${id}`)
+			.then(response => response.json())
+			.then(
+				data => {
+					if (!data || !data.hasOwnProperty("parent") || (data.parent === id)) {
+						callback(ancestors);
+					}	else {
+						ancestors.push(data);
+						this.getAncestors(data.parent, ancestors, callback);
+					}
+				},
+				error => {
+					console.log("Error. Parent: ", data.parent);
+				}
+			);
+	}
+
+	toggleSharingPopup = () => {
 		this.setState({showSharingPopup: !this.state.showSharingPopup});
 	}
 
@@ -31,20 +49,49 @@ class Modal extends Component {
 		fetch(`https://biotax-api.herokuapp.com/api/taxon/${idParam}`)
 			.then(data => data.json())
 			.then(
-				(data) => {
-					console.log(data);
+				data => {
 					this.setState({
 						isLoaded: true,
 						data: data
 					});
 				},
-				(error) => {
+				error => {
 					this.setState({
 						isLoaded: true,
 						error
 					});
 				}
 			)
+
+
+		const parents = [];
+		const showAncestors = function (ancestors) {
+			for (let i = ancestors.length - 1; i >= 0; i--) {
+				let hierarchyItem = document.createElement("div");
+				hierarchyItem.classList.add("modal__hierarchy-item");
+				hierarchyItem.dataset.item = ancestors[i].id;
+
+				let hierarchyItemName = document.createElement("div");
+				hierarchyItemName.classList.add("modal__hierarchy-item-name");
+				hierarchyItemName.innerHTML = ancestors[i].title || ancestors[i].name;
+
+				let hierarchyItemRank = document.createElement("div");
+				hierarchyItemRank.classList.add("modal__hierarchy-item-name");
+				hierarchyItemRank.innerHTML = ancestors[i].rank;
+
+				hierarchyItem.appendChild(hierarchyItemName);
+				hierarchyItem.appendChild(hierarchyItemRank);
+
+				document.getElementById("modal__hierarchy").appendChild(hierarchyItem);
+			}
+
+
+			// $(".modal__hierarchy-item:not(:last-child)").append(`
+			// 	<div class="modal__hierarchy-arrow"></div>
+			// `);
+		};
+
+		this.getAncestors(idParam, parents, showAncestors);
 	}
 
 	render() {
@@ -85,7 +132,7 @@ class Modal extends Component {
 						<div className="modal__title"> {data.title} </div>
 
 						<div className="modal__content">
-							<div className="modal__hierarchy"></div>
+							<div className="modal__hierarchy" id="modal__hierarchy"></div>
 
 							<div className="modal__info">
 							<img src={`${data.image_url}`} alt={`${data.name}`} className="modal__img" />
