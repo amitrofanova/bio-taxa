@@ -14,44 +14,6 @@ class Tree extends Component {
     };
   }
 
-  styleCards = $selectedCard => {
-    let $cardsInRow = $selectedCard.parentElement.children;
-    let $siblings = [...$cardsInRow].filter(c=>c!=$selectedCard);
-    let cardsInRowCount = $cardsInRow.length;
-    let selectedCardNum = Array.prototype.indexOf.call($cardsInRow, $selectedCard);
-    const middleCardNum = Math.floor(cardsInRowCount / 2);
-
-    if ((cardsInRowCount % 2) === 0) {
-      let emptyCard = document.createElement("div");
-      emptyCard.classList.add("card");
-      emptyCard.style.visibility = "hidden";
-
-      $selectedCard.parentElement.appendChild(emptyCard);
-      cardsInRowCount += 1;
-    }
-
-    for (let i = 0; i < cardsInRowCount; i++) {
-      if (i === selectedCardNum) {
-        $cardsInRow[i].style.order = middleCardNum;
-      } else if (i === middleCardNum) {
-        $cardsInRow[i].style.order = selectedCardNum;
-      } else {
-        $cardsInRow[i].style.order = i;
-      }
-    }
-
-
-    if ($selectedCard.classList.contains("card__inactive")) {
-      $selectedCard.classList.remove("card__inactive");
-      $selectedCard.classList.add("card_active");
-    }
-
-    for (let i = 0; i < $siblings.length; i++) {
-      $siblings[i].classList.add("card__inactive");
-    }
-
-  }
-
 	fetchKingdoms = () =>  {
 		fetch("https://biotax-api.herokuapp.com/api/kingdoms")
 			.then(response => response.json())
@@ -94,8 +56,8 @@ class Tree extends Component {
       );
   }
 
-	fetchChildrenFromLastRow = taxonParam => {
-		fetch(`https://biotax-api.herokuapp.com/api/children/${taxonParam}`)
+	fetchChildrenFromLastRow = taxonId => {
+		fetch(`https://biotax-api.herokuapp.com/api/children/${taxonId}`)
 			.then(response => response.json())
 			.then(
 				data => {
@@ -219,19 +181,17 @@ class Tree extends Component {
   repaintTree = (taxonId, rowId) => {
     const rowsCount = this.state.rows.length;
 
-    if (rowId < rowsCount)
+    if (rowId < rowsCount) {
       // card on higher row has been clicked;
       // need to remove all rows lower this row and add one children row
       this.fetchChildrenFromNotLastRow(taxonId, rowId);
-    else
+    } else {
       // just add one row to the end of tree
       this.fetchChildrenFromLastRow(taxonId);
-
-    // TODO: implement link sharing
+    }
   }
 
   componentDidMount() {
-    // return this.paintTree(this.props.taxonParam, this.props.rowParam);
     this.fetchKingdoms();
   }
 
@@ -250,7 +210,6 @@ class Tree extends Component {
 						row={i}
             repaintTree={this.repaintTree}
             toggleModal={this.props.toggleModal}
-            styleCards={this.styleCards}
           />
         ))}
       </div>

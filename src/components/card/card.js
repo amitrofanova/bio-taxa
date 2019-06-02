@@ -8,6 +8,41 @@ class Card extends Component {
 		this.state = {};
 	}
 
+  styleCards = $selectedCard => {
+    let $cardsInRow = $selectedCard.parentElement.children;
+    let $siblings = [...$cardsInRow].filter(c=>c!=$selectedCard);
+    let cardsInRowCount = $cardsInRow.length;
+    const selectedCardNum = Array.prototype.indexOf.call($cardsInRow, $selectedCard);
+    const middleCardNum = Math.floor(cardsInRowCount / 2);
+
+    if ((cardsInRowCount % 2) === 0) {
+      let emptyCard = document.createElement("div");
+      emptyCard.classList.add("card");
+      emptyCard.style.visibility = "hidden";
+
+      $selectedCard.parentElement.appendChild(emptyCard);
+      cardsInRowCount += 1;
+    }
+
+    for (let i = 0; i < cardsInRowCount; i++) {
+      if (i === selectedCardNum) {
+        $cardsInRow[i].style.order = middleCardNum;
+      } else if (i === middleCardNum) {
+        $cardsInRow[i].style.order = selectedCardNum;
+      } else {
+        $cardsInRow[i].style.order = i;
+      }
+    }
+
+    if ($selectedCard.classList.contains("card__inactive")) {
+      $selectedCard.classList.remove("card__inactive");
+    }
+
+    for (let i = 0; i < $siblings.length; i++) {
+      $siblings[i].classList.add("card__inactive");
+    }
+  }
+
 	handleHierarchyClick = evt => {
 		const target = evt.target;
 
@@ -16,7 +51,7 @@ class Card extends Component {
 		const $selectedCard = target.closest(".card");
 
 		this.props.repaintTree(taxonId, rowId);
-		this.props.styleCards($selectedCard);
+		this.styleCards($selectedCard);
 	}
 
 	render() {

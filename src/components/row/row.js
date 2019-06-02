@@ -16,10 +16,8 @@ function Row(props) {
 				url={card.url}
 				childrenCount={card.total_children}
 				row={props.row}
-				// updateUrl={props.updateUrl}
 				repaintTree={props.repaintTree}
 				toggleModal={props.toggleModal}
-				styleCards={props.styleCards}
 			/>
 		)
 	});
