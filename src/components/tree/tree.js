@@ -14,11 +14,8 @@ class Tree extends Component {
     };
   }
 
-  updateUrl = evt => {
-    const url = evt.target.dataset.id;
-    const activeRow = parseInt(evt.target.dataset.row) + 1;
-
-    this.props.history.push(`?taxon=${url}&row=${activeRow}`);
+  updateUrl = (id, row) => {
+    this.props.history.push(`?taxon=${id}&row=${row}`);
   };
 
   transformNotChoisenSiblings = $selectedCard => {
@@ -58,7 +55,7 @@ class Tree extends Component {
       .then(
         data => {
           this.setState({
-            rows: [{rank: "Kingdom", items: result}],
+            rows: [{rank: "Kingdom", items: data}],
           });
 
           for (let i = 0; i < childrenArrays.length; i++) {
