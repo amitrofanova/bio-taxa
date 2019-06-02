@@ -18,16 +18,12 @@ class Tree extends Component {
     this.props.history.push(`?taxon=${id}&row=${row}`);
   };
 
-  transformNotChoisenSiblings = $selectedCard => {
+  styleCards = $selectedCard => {
     let $cardsInRow = $selectedCard.parentElement.children;
     let $siblings = [...$cardsInRow].filter(c=>c!=$selectedCard);
     let cardsInRowCount = $cardsInRow.length;
     let selectedCardNum = Array.prototype.indexOf.call($cardsInRow, $selectedCard);
     const middleCardNum = Math.floor(cardsInRowCount / 2);
-
-    for (let i = 0; i < $siblings.length; i++) {
-      $siblings[i].classList.add("card__inactive");
-    }
 
     if ((cardsInRowCount % 2) === 0) {
       let emptyCard = document.createElement("div");
@@ -36,17 +32,28 @@ class Tree extends Component {
 
       $selectedCard.parentElement.appendChild(emptyCard);
       cardsInRowCount += 1;
+    }
 
-      for (let i = 0; i < cardsInRowCount; i++) {
-        if (i === selectedCardNum) {
-          $cardsInRow[i].style.order = middleCardNum;
-        } else if (i === middleCardNum) {
-          $cardsInRow[i].style.order = selectedCardNum;
-        } else {
-          $cardsInRow[i].style.order = i;
-        }
+    for (let i = 0; i < cardsInRowCount; i++) {
+      if (i === selectedCardNum) {
+        $cardsInRow[i].style.order = middleCardNum;
+      } else if (i === middleCardNum) {
+        $cardsInRow[i].style.order = selectedCardNum;
+      } else {
+        $cardsInRow[i].style.order = i;
       }
     }
+
+
+    if ($selectedCard.classList.contains("card__inactive")) {
+      $selectedCard.classList.remove("card__inactive");
+      $selectedCard.classList.add("card_active");
+    }
+
+    for (let i = 0; i < $siblings.length; i++) {
+      $siblings[i].classList.add("card__inactive");
+    }
+
   }
 
   setRowsState = childrenArrays => {
@@ -92,7 +99,32 @@ class Tree extends Component {
 			);
 	}
 
-	fetchOneChildRow = taxonParam => {
+  fetchChildrenFromNotLastRow = (taxonId, rowId) => {
+    fetch(`https://biotax-api.herokuapp.com/api/children/${taxonId}`)
+      .then(response => response.json())
+      .then(
+        data => {
+          let rank = data.children[0].rank;
+          let children = data.children;
+
+          let newRowsArr = [...this.state.rows];
+          newRowsArr.splice(rowId);
+          newRowsArr.push({rank: rank, items: children});
+
+          this.setState({
+            rows: newRowsArr,
+            error: false,
+          });
+        },
+        error => {
+          this.setState({
+            error
+          });
+        }
+      );
+  }
+
+	fetchChildrenFromLastRow = taxonParam => {
 		fetch(`https://biotax-api.herokuapp.com/api/children/${taxonParam}`)
 			.then(response => response.json())
 			.then(
@@ -154,57 +186,47 @@ class Tree extends Component {
 			);
 	}
 
-  paintTree = (taxonParam, rowParam) => {
-    // url contains taxonParam
-    if (taxonParam) {
-			const rowsCount = this.state.rows.length;
-
-      // tree already contains rows
-			if (rowsCount) {
-        // card on higher row has been clicked
-        // need to remove all rows lower this row and add one children row
-				if (rowParam < rowsCount) {
-					let newRowsArr = [...this.state.rows];
-
-					newRowsArr.splice(rowParam);
-
-					this.setState({
-						rows: newRowsArr,
-					});
-
-					this.fetchOneChildRow(taxonParam);
-				} else
-				// just add one row to the tree
-        	this.fetchOneChildRow(taxonParam);
-      } else
-				// url contains taxonParam but tree is empty (link was shared)
-        this.fetchAllRowsByQuery(taxonParam);
-    } else
-			// there are no url parameters, render home page
-      this.fetchKingdoms();
-  };
+  // paintTree = (taxonParam, rowParam) => {
+  //   // url contains taxonParam
+  //   if (taxonParam) {
+	// 		const rowsCount = this.state.rows.length;
+  //
+  //     // tree already contains rows
+	// 		if (rowsCount) {
+  //       // card on higher row has been clicked
+  //       // need to remove all rows lower this row and add one children row
+	// 			if (rowParam < rowsCount) {
+	// 				let newRowsArr = [...this.state.rows];
+  //
+	// 				newRowsArr.splice(rowParam);
+  //
+	// 				this.setState({
+	// 					rows: newRowsArr,
+	// 				});
+  //
+	// 				this.fetchOneChildRow(taxonParam);
+	// 			} else
+	// 			// just add one row to the tree
+  //       	this.fetchOneChildRow(taxonParam);
+  //     } else
+	// 			// url contains taxonParam but tree is empty (link was shared)
+  //       this.fetchAllRowsByQuery(taxonParam);
+  //   } else
+	// 		// there are no url parameters, render home page
+  //     this.fetchKingdoms();
+  // };
 
   repaintTree = (taxonId, rowId) => {
     const rowsCount = this.state.rows.length;
 
-    // tree already contains rows
-    if (rowsCount) {
-      // card on higher row has been clicked
+    if (rowId < rowsCount)
+      // card on higher row has been clicked;
       // need to remove all rows lower this row and add one children row
-      if (rowId < rowsCount) {
-        let newRowsArr = [...this.state.rows];
+      this.fetchChildrenFromNotLastRow(taxonId, rowId);
+    else
+      // just add one row to the end of tree
+      this.fetchChildrenFromLastRow(taxonId);
 
-        newRowsArr.splice(rowId);
-
-        this.setState({
-          rows: newRowsArr,
-        });
-
-        this.fetchOneChildRow(taxonId);
-      } else
-      // just add one row to the tree
-        this.fetchOneChildRow(taxonId);
-    }
     // TODO: implement link sharing
   }
 
@@ -213,14 +235,9 @@ class Tree extends Component {
     this.fetchKingdoms();
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.taxonParam !== this.props.taxonParam) {
-  //     return this.paintTree(nextProps.taxonParam, nextProps.rowParam);
-  //   }
-  // }
-
   componentDidUpdate() {
-    window.scrollTo(0, document.body.scrollHeight);
+    // window.scrollTo(0, document.body.scrollHeight);
+    console.log("update");
   }
 
   render() {
@@ -235,7 +252,7 @@ class Tree extends Component {
             // updateUrl={this.updateUrl}
             repaintTree={this.repaintTree}
             toggleModal={this.props.toggleModal}
-            transformNotChoisenSiblings={this.transformNotChoisenSiblings}
+            styleCards={this.styleCards}
           />
         ))}
       </div>

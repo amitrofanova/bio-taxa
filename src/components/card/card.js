@@ -13,23 +13,10 @@ class Card extends Component {
 
     const taxonId = target.dataset.id;
     const rowId = parseInt(target.dataset.row) + 1;
-		const $clickedCard = target.closest(".card");
+		const $selectedCard = target.closest(".card");
 
-		// this.props.updateUrl(id, row);
 		this.props.repaintTree(taxonId, rowId);
-		this.props.transformNotChoisenSiblings($clickedCard);
-
-		if ($clickedCard.classList.contains("card__inactive")) {
-			$clickedCard.classList.remove("card__inactive");
-		}
-
-		let $siblings = [...$clickedCard.parentElement.children].filter(c=>c!=$clickedCard);
-
-		for (let i = 0; i < $siblings.length; i++) {
-			$siblings[i].classList.add("card__inactive");
-		}
-
-		$clickedCard.classList.add("card_active");
+		this.props.styleCards($selectedCard);
 	}
 
 	render() {

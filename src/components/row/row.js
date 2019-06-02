@@ -19,7 +19,7 @@ function Row(props) {
 				// updateUrl={props.updateUrl}
 				repaintTree={props.repaintTree}
 				toggleModal={props.toggleModal}
-				transformNotChoisenSiblings={props.transformNotChoisenSiblings}
+				styleCards={props.styleCards}
 			/>
 		)
 	});
