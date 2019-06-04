@@ -76,11 +76,17 @@ class Modal extends Component {
 				hierarchyItemName.innerHTML = ancestors[i].title || ancestors[i].name;
 
 				let hierarchyItemRank = document.createElement("div");
-				hierarchyItemRank.classList.add("modal__hierarchy-item-name");
+				hierarchyItemRank.classList.add("modal__hierarchy-item-rank");
 				hierarchyItemRank.innerHTML = ancestors[i].rank;
 
 				hierarchyItem.appendChild(hierarchyItemName);
 				hierarchyItem.appendChild(hierarchyItemRank);
+
+				if (i > 0) {
+					let hierarchyArrow = document.createElement("div");
+					hierarchyArrow.classList.add("modal__hierarchy-arrow");
+					hierarchyItem.appendChild(hierarchyArrow);
+				}
 
 				document.getElementById("modal__hierarchy").appendChild(hierarchyItem);
 			}
