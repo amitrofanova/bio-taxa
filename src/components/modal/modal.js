@@ -8,6 +8,7 @@ import WikiIcon from "../../resources/images/wiki-icon.svg";
 class Modal extends Component {
 	constructor(props) {
     super(props);
+
     this.state = {
 			error: null,
 			isLoaded: false,
@@ -20,6 +21,27 @@ class Modal extends Component {
 	// 	e.stopPropagation();
 	// 	this.props.history.goBack();
 	// }
+
+	fetchTaxonData = () => {
+		const idParam = this.props.id || this.props.match.params.id;
+
+		fetch(`https://biotax-api.herokuapp.com/api/taxon/${idParam}`)
+			.then(response => response.json())
+			.then(
+				data => {
+					this.setState({
+						isLoaded: true,
+						data: data
+					});
+				},
+				error => {
+					this.setState({
+						isLoaded: true,
+						error
+					});
+				}
+			)
+	}
 
 	getAncestors = (id, ancestors, callback) => {
 		fetch(`https://biotax-api.herokuapp.com/api/taxon/${id}`)
@@ -39,31 +61,8 @@ class Modal extends Component {
 			);
 	}
 
-	toggleSharingPopup = () => {
-		this.setState({showSharingPopup: !this.state.showSharingPopup});
-	}
-
-	componentDidMount() {
+	showHierarchy = () => {
 		const idParam = this.props.id || this.props.match.params.id;
-
-		fetch(`https://biotax-api.herokuapp.com/api/taxon/${idParam}`)
-			.then(data => data.json())
-			.then(
-				data => {
-					this.setState({
-						isLoaded: true,
-						data: data
-					});
-				},
-				error => {
-					this.setState({
-						isLoaded: true,
-						error
-					});
-				}
-			)
-
-
 		const parents = [];
 		const showAncestors = function (ancestors) {
 			for (let i = ancestors.length - 1; i >= 0; i--) {
@@ -82,6 +81,7 @@ class Modal extends Component {
 				hierarchyItem.appendChild(hierarchyItemName);
 				hierarchyItem.appendChild(hierarchyItemRank);
 
+				// add arrow if it's not last item
 				if (i > 0) {
 					let hierarchyArrow = document.createElement("div");
 					hierarchyArrow.classList.add("modal__hierarchy-arrow");
@@ -90,14 +90,18 @@ class Modal extends Component {
 
 				document.getElementById("modal__hierarchy").appendChild(hierarchyItem);
 			}
-
-
-			// $(".modal__hierarchy-item:not(:last-child)").append(`
-			// 	<div class="modal__hierarchy-arrow"></div>
-			// `);
 		};
 
 		this.getAncestors(idParam, parents, showAncestors);
+	}
+
+	toggleSharingPopup = () => {
+		this.setState({showSharingPopup: !this.state.showSharingPopup});
+	}
+
+	componentDidMount() {
+		this.fetchTaxonData();
+		this.showHierarchy();
 	}
 
 	render() {
