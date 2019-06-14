@@ -113,8 +113,16 @@ $border-color: darkslategray
 	opacity: .4
 
 .card_active
-	flex-grow: 1
-	cursor: auto
+	position: relative
+	// flex-grow: 1
+	// cursor: auto
+	&::after
+		position: absolute
+		top: 100%
+		left: 50%
+		width: 2px
+		height: 30px
+		background-color: #000
 
 .card__arc
 	z-index: 0
@@ -143,5 +151,5 @@ $border-color: darkslategray
 		display: none
 
 .card__inactive
-	transform: scale(.9)
-	opacity: .7
+	transform: scale(.8)
+	opacity: .6
