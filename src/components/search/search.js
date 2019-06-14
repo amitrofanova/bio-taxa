@@ -48,21 +48,32 @@ class Search extends Component {
 				this.toggleInputStyle();
 
 				fetch(`https://biotax-api.herokuapp.com/api/search/${query}/${maxResultsNum}`)
-					.then(data => data.json())
+					.then(response => response.json())
 					.then(
-						(data) => {
-							for (let i = 0; i < data.length; i++) {
-								let newLi = document.createElement('li');
+						data => {
+							if (data.length === 0) {
+								let listItem = document.createElement("li");
 
-								newLi.setAttribute("data-id", data[i].tsn);
-								newLi.onclick = this.handleLiClick;
-								newLi.innerHTML = data[i].title;
+								listItem.innerHTML = "No results found";
+								listItem.classList.add("search__no-result");
 
-								ul.appendChild(newLi);
+								ul.appendChild(listItem);
 							}
 
+							if (data.length > 0) {
+								for (let i = 0; i < data.length; i++) {
+									let listItem = document.createElement("li");
+
+									listItem.setAttribute("data-id", data[i].tsn);
+									listItem.onclick = this.handleLiClick;
+									listItem.innerHTML = data[i].title;
+									listItem.classList.add("search__list-item");
+
+									ul.appendChild(listItem);
+								}
+							}
 						},
-						(error) => {
+						error => {
 							console.log("search error", error);
 						}
 					)
