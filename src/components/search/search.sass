@@ -42,7 +42,7 @@
 	width: 100%
 	background-color: #fff
 
-.search__result li
+.search__list-item
 	border-left: 1px solid #eee
 	border-right: 1px solid #eee
 	border-bottom: 1px solid #eee
@@ -56,6 +56,13 @@
 	&:hover
 		background-color: #eee
 		cursor: pointer
+
+.search__no-result
+	@extend .search__list-item
+	&:hover
+		background-color: #fff
+		cursor: default
+
 
 /* clears the 'X' from Internet Explorer */
 input[type=search]::-ms-clear
