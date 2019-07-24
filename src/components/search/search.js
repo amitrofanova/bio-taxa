@@ -2,6 +2,16 @@ import React, { Component } from "react";
 import "./search.sass";
 import Modal from "../modal/modal.js";
 
+document.addEventListener("click", function(e) {
+	const $resultList = document.querySelector("#search__result");
+
+	if (e.target.closest("#search__result")) return;
+
+	while ($resultList.firstChild) {
+		$resultList.removeChild($resultList.firstChild);
+	}
+});
+
 // TODO: move to class?
 function clearSearchResult(list) {
 	while (list.firstChild) {
@@ -15,7 +25,7 @@ class Search extends Component {
 		this.timeout =  0;
 	}
 
-	toggleInputStyle() {
+	toggleResultList = () => {
 		document.querySelector(".search__input").classList.toggle("search__input_active");
 	}
 
@@ -29,7 +39,7 @@ class Search extends Component {
 
 			ul.parentNode.querySelector(".search__input").value = "";
 
-			this.toggleInputStyle();
+			this.toggleResultList();
 		}, 1500);
 	}
 
@@ -45,7 +55,7 @@ class Search extends Component {
 
     this.timeout = setTimeout(() => {
 			if (query.length >= minValueLength) {
-				this.toggleInputStyle();
+				this.toggleResultList();
 
 				fetch(`https://biotax-api.herokuapp.com/api/search/${query}/${maxResultsNum}`)
 					.then(response => response.json())
