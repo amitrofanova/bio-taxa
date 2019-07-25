@@ -2,22 +2,21 @@ import React, { Component } from "react";
 import "./search.sass";
 import Modal from "../modal/modal.js";
 
-document.addEventListener("click", function(e) {
-	const $resultList = document.querySelector("#search__result");
-
-	if (e.target.closest("#search__result")) return;
-
-	while ($resultList.firstChild) {
-		$resultList.removeChild($resultList.firstChild);
-	}
-});
-
 // TODO: move to class?
 function clearSearchResult(list) {
 	while (list.firstChild) {
 		list.removeChild(list.firstChild);
 	}
 }
+
+document.addEventListener("click", function(e) {
+	const $resultList = document.querySelector("#search__result");
+
+	if (e.target.closest("#search__result")) return;
+
+	clearSearchResult($resultList);
+	$resultList.parentNode.querySelector(".search__input").value = "";
+});
 
 class Search extends Component {
 	constructor(props) {
