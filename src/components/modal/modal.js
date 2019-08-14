@@ -99,6 +99,10 @@ class Modal extends Component {
 		this.setState({showSharingPopup: !this.state.showSharingPopup});
 	}
 
+	redirectToHome = () => {
+		window.location.href = "/";
+	}
+
 	componentDidMount() {
 		this.fetchTaxonData();
 		this.showHierarchy();
@@ -108,6 +112,7 @@ class Modal extends Component {
 		const { error, isLoaded, data } = this.state;
 		const taxonId = this.props.id || this.props.match.params.id;
 		const sharingLink = "";
+		const isSharing = this.props.match ? this.props.match.params.id : null;
 
 		if (!taxonId) return null;
 
@@ -184,7 +189,7 @@ class Modal extends Component {
 							}
 						</div>
 
-						<Close className="modal__close" onClick={this.props.toggleModal} />
+						<Close className="modal__close" onClick={isSharing ? this.redirectToHome : this.props.toggleModal} />
 					</div>
 				</div>
 			);
