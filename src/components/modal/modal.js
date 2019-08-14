@@ -122,7 +122,9 @@ class Modal extends Component {
 					<div className="modal__bg"></div>
 
 					<div className="modal__inner">
-						<div style={ { margin: 10 } }>Error: {error ? error.message : "Taxon data was not found"}</div>
+						<div style={ { margin: 10 } }>
+							Error: {error ? error.message : "Taxon data was not found"}
+						</div>
 
 						<Close className="modal__close" onClick={this.props.toggleModal} />
 					</div>
@@ -184,12 +186,19 @@ class Modal extends Component {
 							</div>
 
 							{this.state.showSharingPopup ?
-								<Sharing url={`taxon/${data.id}`} className="modal__sharing" handleClose={(e) => this.toggleSharingPopup(e)} />
+								<Sharing
+									url={`taxon/${data.id}`}
+									className="modal__sharing"
+									handleClose={(e) => this.toggleSharingPopup(e)}
+								/>
 								: null
 							}
 						</div>
 
-						<Close className="modal__close" onClick={isSharing ? this.redirectToHome : this.props.toggleModal} />
+						<Close
+							className="modal__close"
+							onClick={isSharing ? this.redirectToHome : this.props.toggleModal}
+						/>
 					</div>
 				</div>
 			);
